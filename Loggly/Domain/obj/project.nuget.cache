@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mjbb90mGoOuN/xbuxXFF750xbJcVwwRiyu5dvz+UVY8eZyD0G9EqyB4BExApCkL4d1A8Z0HLZmd/Qa3rbjh4OQ==",
+  "dgSpecHash": "7EySxjzrQEZnNHpHlrbXxGXYuomopFhFRK9NLbP2RUyhaSp0EiEvLEy0ripoiESNn8GCYHWkW0mt5xEH4m27Hg==",
   "success": true,
-  "projectFilePath": "W:\\DotNet\\Loggly\\Loggly\\Domain\\Domain.csproj",
+  "projectFilePath": "C:\\Users\\ryanb\\OneDrive\\Desktop\\Loggly\\Loggly\\Domain\\Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

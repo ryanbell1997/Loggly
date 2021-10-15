@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "W:\\DotNet\\Loggly\\Loggly\\Application\\Application.csproj": {}
+    "C:\\Users\\ryanb\\OneDrive\\Desktop\\Loggly\\Loggly\\Application\\Application.csproj": {}
   },
   "projects": {
-    "W:\\DotNet\\Loggly\\Loggly\\Application\\Application.csproj": {
+    "C:\\Users\\ryanb\\OneDrive\\Desktop\\Loggly\\Loggly\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "W:\\DotNet\\Loggly\\Loggly\\Application\\Application.csproj",
+        "projectUniqueName": "C:\\Users\\ryanb\\OneDrive\\Desktop\\Loggly\\Loggly\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "W:\\DotNet\\Loggly\\Loggly\\Application\\Application.csproj",
-        "packagesPath": "C:\\Users\\Ryan\\.nuget\\packages\\",
-        "outputPath": "W:\\DotNet\\Loggly\\Loggly\\Application\\obj\\",
+        "projectPath": "C:\\Users\\ryanb\\OneDrive\\Desktop\\Loggly\\Loggly\\Application\\Application.csproj",
+        "packagesPath": "C:\\Users\\ryanb\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ryanb\\OneDrive\\Desktop\\Loggly\\Loggly\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Ryan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ryanb\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -54,7 +54,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }
