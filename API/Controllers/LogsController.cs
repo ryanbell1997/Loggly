@@ -1,32 +1,47 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Persistence;
 using Domain;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Application.Logs;
+using MediatR;
 
 namespace API.Controllers
 {
     public class LogsController : BaseApiController
     {
-        private readonly DataContext _context;
-        public LogsController(DataContext context)
+        public LogsController(IMediator mediator) : base(mediator)
         {
-            _context = context;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Log>>> GetAllLogs()
         {
-            return await _context.Logs.ToListAsync();
+            return await Mediator.Send(new List.Query());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Log>> GetLog(Guid id)
         {
-            return await _context.Logs.FindAsync(id);
+            return await Mediator.Send(new Details.Query{Id = id});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateLog(Log log)
+        {
+            return Ok(await Mediator.Send(new Create.Command{Log = log}));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteLog(Guid id)
+        {
+            return Ok(await Mediator.Send(new Delete.Command{Id = id}));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditLog(Guid id, Log log)
+        {
+            return Ok(await Mediator.Send(new Edit.Command{Log = log}));
         }
 
     }
