@@ -1,22 +1,25 @@
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import React, { Fragment } from 'react';
 import { CalendarToday, Dashboard } from '@mui/icons-material';
+import { useStore } from '../stores/store';
+import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 
-interface props {
-    isOpen: boolean
-    handleMenuShow: (isOpen:boolean) => void
-}
 
-export default function SideMenu({isOpen, handleMenuShow}: props){
+
+export default observer(function SideMenu(){
+
+    const {generalStore} = useStore();
+
     return(
         <Fragment>
             <Drawer
             anchor='left'
-            open={isOpen}
-            onClose={() =>handleMenuShow(isOpen)}
+            open={generalStore.isMenuOpen}
+            onClose={() => generalStore.setMenuOpenStatus(false)}
             >
             <List>
-                <ListItem disablePadding>
+                <ListItem component={Link} to="/">
                     <ListItemButton>
                     <ListItemIcon>
                         <Dashboard />
@@ -25,7 +28,7 @@ export default function SideMenu({isOpen, handleMenuShow}: props){
                     </ListItemButton>
                 </ListItem>
 
-                <ListItem disablePadding>
+                <ListItem component={Link} to='/log'>
                 <ListItemButton>
                 <ListItemIcon>
                     <CalendarToday />
@@ -37,4 +40,4 @@ export default function SideMenu({isOpen, handleMenuShow}: props){
             </Drawer>
       </Fragment>
     );
-}
+});
