@@ -20,7 +20,7 @@ export default class LogStore {
         try {
             const logs = await agent.Logs.list(); 
             logs.forEach(log => {
-                this.tableLogs.push({id: log.id, date: log.date.split('T')[0], startTime: log.startTime.split('T')[1], endTime: log.finishTime.split('T')[1], earnings: log.totalCharged})
+                this.setTableLogs(log);
                 })
             this.setLoading(false);
 
@@ -28,6 +28,10 @@ export default class LogStore {
             console.log(error);
             this.setLoading(false);
         }
+    }
+
+    private setTableLogs = (log : Log) => {
+        this.tableLogs.push({id: log.id, date: log.date.split('T')[0], startTime: log.startTime.split('T')[1], endTime: log.endTime.split('T')[1], earnings: log.totalCharged})
     }
 
     loadLog = async(id: string) => {
@@ -51,16 +55,11 @@ export default class LogStore {
         }
     }
 
-    createLog = async(date:Date | null, startTime:Date | null, endTime:Date | null, hourlyRate:number) => {
+    createLog = async(log: Log) => {
         this.loading = true;
+        console.log("Hello");
         try {
-            const log : Log = {
-                date: date.toDateString(),
-                startTime: startTime.toDateString(),
-                finishTime: endTime.toDateString(),
-                hourlyRate: hourlyRate
-            }
-
+            console.log(log);
             await agent.Logs.create(log);
             this.setLoading(false);
         } catch (error) {

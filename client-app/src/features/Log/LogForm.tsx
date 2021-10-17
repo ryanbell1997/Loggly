@@ -7,29 +7,32 @@ import { DatePicker, TimePicker } from '@mui/lab';
 import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import { Check } from '@mui/icons-material';
-import { start } from 'repl';
 
 export default observer(function LogForm(){
 
     const { logStore, userStore } = useStore();
-    const {editMode, setEditing, createLog, selectedLog} = logStore;
+    const {editMode, setEditing, selectedLog} = logStore;
     const { hourlyRate } = userStore;
 
-    const [date, setDate] = useState<Date | null>(null);
-    const [startTime, setStartTime] = useState<Date | null>(null);
-    const [finishTime, setFinishTime] = useState<Date | null>(null);
+    const [date, setDate] = useState(null);
+    const [startTime, setStartTime] = useState(null);
+    const [finishTime, setEndTime] = useState(null);
     const [priceOverride, setPriceOverride] = useState<ChangeEvent<HTMLInputElement> | boolean | null>(null);
 
-    const initialState = selectedLog ?? {
-        id: '',
-        date: '',
-        startTime: '',
-        finishTime: '',
-        hourlyRate: '',
-    };
+    // const initialState = selectedLog ?? {
+    //     id: '',
+    //     date: '',
+    //     startTime: '',
+    //     endTime: '',
+    //     hourlyRate: 0,
+    // };
 
-    const [log, setLog] = useState(initialState);
+    // const [log, setLog] = useState(initialState);
 
+    function handleSubmit() {
+        console.log("Hello");
+    }
+    // createLog(date, startTime, finishTime, 8)
     return(
         <Modal
             open={editMode}
@@ -39,7 +42,7 @@ export default observer(function LogForm(){
             >
             <Box sx={{ backgroundColor: 'white', width: '85%', margin: '5em auto' }}>
                 <Box sx={{width: '90%', margin: "0px auto", paddingTop:"1.5em", paddingBottom:"1.5em"}}>
-                    <form onSubmit={() => createLog(date, startTime, finishTime, 8)} autoComplete="off">
+                    <form onSubmit={handleSubmit} autoComplete="off">
                         {/* <Formik initialValues={log} onSubmit={values => console.log(values)}>
                             {({values, handleChange, handleSubmit}) => ( */}
 
@@ -51,6 +54,7 @@ export default observer(function LogForm(){
                                                 value={date}
                                                 onChange = {(newValue) => setDate(newValue)}
                                                 renderInput={(params) => <TextField {...params}
+                                                name="date"
                                                 />}
                                             />
                                             <TimePicker
@@ -59,15 +63,19 @@ export default observer(function LogForm(){
                                                 onChange={(newValue) => {
                                                     setStartTime(newValue);
                                                 }}
-                                                renderInput={(params) => <TextField {...params} />}
+                                                renderInput={(params) => <TextField {...params} 
+                                                name="startTime"
+                                                />}
                                             />
                                             <TimePicker
                                                 label="Finish Time"
                                                 value={finishTime}
                                                 onChange={(newValue) => {
-                                                    setFinishTime(newValue);
+                                                    setEndTime(newValue);
                                                 }}
-                                                renderInput={(params) => <TextField {...params} />}
+                                                renderInput={(params) => <TextField {...params} 
+                                                name="endTime"
+                                                />}
                                             />
                                             <FormControlLabel label="Override Hourly Price" control={
                                                 <Checkbox 
@@ -75,9 +83,10 @@ export default observer(function LogForm(){
                                                     onChange={(newValue) => {
                                                         setPriceOverride(newValue.target.checked);
                                                     }}
+                                                    name="overridePrice"
                                                 />
                                             } />
-                                            <TextField id="hourlyRate" label="Hourly Rate" variant="outlined" disabled={priceOverride ? false : true} value={hourlyRate}/>
+                                            <TextField id="hourlyRate" label="Hourly Rate" variant="outlined" disabled={priceOverride ? false : true} value={hourlyRate} name="hourlyRate" />
                                             <Button variant="contained" type="submit" color="success" endIcon={<Check />}>Submit</Button>
                                         </Stack>
                                     </LocalizationProvider>

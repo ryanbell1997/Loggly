@@ -5,6 +5,7 @@ import React from 'react';
 import SideMenu from './SideMenu';
 import { useStore } from '../stores/store';
 import { observer } from 'mobx-react-lite';
+import { NavLink } from 'react-router-dom';
 
 export default observer(function NavBar(){
     
@@ -28,7 +29,7 @@ export default observer(function NavBar(){
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     Loggly
                 </Typography>
-                    <Button color="inherit"><Avatar /></Button>
+                    <Button color="inherit" component={NavLink} to={generalStore.isSignedIn ? '/user/account' : '/user/signin'} ><Avatar /></Button>
                 </Toolbar>
             </AppBar>
     </Box>

@@ -1,5 +1,4 @@
 import { makeAutoObservable } from "mobx";
-import agent from "../api/agent";
 
 export default class UserStore {
 

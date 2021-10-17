@@ -10,16 +10,17 @@ import { Link } from 'react-router-dom';
 export default observer(function SideMenu(){
 
     const {generalStore} = useStore();
+    const {setMenuOpenStatus, isMenuOpen} = generalStore;
 
     return(
         <Fragment>
             <Drawer
             anchor='left'
-            open={generalStore.isMenuOpen}
-            onClose={() => generalStore.setMenuOpenStatus(false)}
+            open={isMenuOpen}
+            onClose={() => setMenuOpenStatus(false)}
             >
             <List>
-                <ListItem component={Link} to="/">
+                <ListItem component={Link} to="/" onClick={() => setMenuOpenStatus(false)} >
                     <ListItemButton>
                     <ListItemIcon>
                         <Dashboard />
@@ -28,7 +29,7 @@ export default observer(function SideMenu(){
                     </ListItemButton>
                 </ListItem>
 
-                <ListItem component={Link} to='/log'>
+                <ListItem component={Link} to='/log' onClick={() => setMenuOpenStatus(false)} >
                 <ListItemButton>
                 <ListItemIcon>
                     <CalendarToday />

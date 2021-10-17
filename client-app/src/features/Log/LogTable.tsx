@@ -9,12 +9,11 @@ import { Link } from 'react-router-dom';
 
 export default observer(function LogTable(){
     const {logStore} = useStore();
-    const {setEditing, tableLogs, deleteLog} = logStore;
+    const {setEditing, tableLogs, deleteLog, loadLogs} = logStore;
 
     useEffect(() => {   
-        logStore.loadLogs();
-      }, [logStore])
-
+        loadLogs();
+      }, [])
 
     let rows: GridRowsProp = [...tableLogs];
 

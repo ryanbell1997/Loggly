@@ -1,8 +1,8 @@
 export interface Log {
-    id? : string
+    id : string
     date: string
     startTime: string
-    finishTime: string
+    endTime: string
     hourlyRate: number
     totalCharged? : number
     is_overtime?: boolean
