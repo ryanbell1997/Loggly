@@ -2,6 +2,7 @@ import { GridRowData } from "@mui/x-data-grid";
 import { makeAutoObservable } from "mobx";
 import agent from "../api/agent";
 import { Log } from "../layout/models/log";
+import { v4 as uuid } from 'uuid';
 
 export default class LogStore {
 
@@ -57,8 +58,8 @@ export default class LogStore {
 
     createLog = async(log: Log) => {
         this.loading = true;
-        console.log("Hello");
         try {
+            log.id = uuid();
             console.log(log);
             await agent.Logs.create(log);
             this.setLoading(false);
