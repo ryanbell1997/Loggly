@@ -1,5 +1,7 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Utils;
 using Domain;
 using MediatR;
 using Persistence;
@@ -20,11 +22,18 @@ namespace Application.Logs
             public Handler(DataContext context)
             {
                 _context = context;
+
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                _context.Logs.Add(request.Log);
+                Log eLog = new();
+                eLog = request.Log;
+
+                eLog.TotalTime = LogUtils.CalculateTotalTime(request.Log.StartTime, request.Log.EndTime);
+                eLog.TotalCharged = LogUtils.CalculateTotalEarnings(eLog.TotalTime, request.Log.HourlyRate);    
+
+                _context.Logs.Add(eLog);
 
                 await _context.SaveChangesAsync();
 

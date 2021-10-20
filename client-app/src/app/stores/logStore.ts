@@ -31,10 +31,6 @@ export default class LogStore {
         }
     }
 
-    private setTableLogs = (log : Log) => {
-        this.tableLogs.push({id: log.id, date: log.date.split('T')[0], startTime: log.startTime, endTime: log.endTime, earnings: log.totalCharged})
-    }
-
     loadLog = async(id: string) => {
         let log = this.getLog(id);
         if (log){
@@ -62,6 +58,8 @@ export default class LogStore {
             log.id = uuid();
             console.log(log);
             await agent.Logs.create(log);
+            this.setTableLogs(log);
+            this.setEditing(false);
             this.setLoading(false);
         } catch (error) {
             console.log(error);
@@ -73,6 +71,7 @@ export default class LogStore {
         this.loading = true;
         try {
             await agent.Logs.delete(id);
+            this.removeTableLog(id);
             this.removeLog(id);
             this.setLoading(false);
 
@@ -80,6 +79,24 @@ export default class LogStore {
             console.log(error);
             this.setLoading(false);
         }
+    }
+
+    editLog = async(log: Log) => {
+        this.loading = true;
+        try {
+            await agent.Logs.update(log);
+        } catch (error) {
+            console.log(error);
+            this.setLoading(false);
+        }
+    }
+
+    private setTableLogs = (log : Log) => {
+        this.tableLogs.push({id: log.id, date: log.date.split('T')[0], startTime: log.startTime, endTime: log.endTime, earnings: log.totalCharged})
+    }
+
+    private removeTableLog = (id: string) => {
+        this.tableLogs = this.tableLogs.filter(x => x.id !== id);
     }
 
     private removeLog = (id: string) => {

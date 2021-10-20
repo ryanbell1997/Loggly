@@ -20,7 +20,7 @@ export default observer(function LogForm(){
         startTime: '',
         endTime: '',
         hourlyRate: 0,
-        totalCharged: 5,
+        totalCharged: 0,
         is_overtime: false
     };
 
