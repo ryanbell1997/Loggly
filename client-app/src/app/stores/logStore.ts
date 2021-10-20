@@ -32,7 +32,7 @@ export default class LogStore {
     }
 
     private setTableLogs = (log : Log) => {
-        this.tableLogs.push({id: log.id, date: log.date.split('T')[0], startTime: log.startTime.split('T')[1], endTime: log.endTime.split('T')[1], earnings: log.totalCharged})
+        this.tableLogs.push({id: log.id, date: log.date.split('T')[0], startTime: log.startTime, endTime: log.endTime, earnings: log.totalCharged})
     }
 
     loadLog = async(id: string) => {

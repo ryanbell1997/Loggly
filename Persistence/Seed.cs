@@ -15,8 +15,8 @@ namespace Persistence
             List<Log> logs = new(){
                 new Log
                 {
-                    StartTime = DateTime.Now,
-                    EndTime = DateTime.Now,
+                    StartTime = new TimeSpan(),
+                    EndTime = new TimeSpan(),
                     TotalCharged = 15,
                     is_overtime = false,
                     HourlyRate = 5,

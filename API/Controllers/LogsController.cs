@@ -27,7 +27,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateLog(Log log)
+        public async Task<IActionResult> CreateLog([FromBody]Log log)
         {
             return Ok(await Mediator.Send(new Create.Command{Log = log}));
         }
