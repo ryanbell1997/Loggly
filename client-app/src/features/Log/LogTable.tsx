@@ -5,11 +5,10 @@ import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import { Add, Delete, Edit, FileDownload, Share } from '@mui/icons-material';
 import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
-import { Link } from 'react-router-dom';
 
 export default observer(function LogTable(){
     const {logStore} = useStore();
-    const {setEditing, tableLogs, deleteLog, loadLogs} = logStore;
+    const {tableLogs, deleteLog, loadLogs, openForm} = logStore;
 
     useEffect(() => {   
         loadLogs();
@@ -25,8 +24,7 @@ export default observer(function LogTable(){
     { field: 'actions', headerName: 'Actions', flex:1, type: 'actions', getActions: (params: GridRowParams) => [
         <GridActionsCellItem 
             icon={<Edit />} 
-            component={Link} 
-            to={`/log/${params.id}`} 
+            onClick={() => {openForm(params.id.toString())}}
             label="Edit" />,
         
         <GridActionsCellItem 
@@ -51,7 +49,7 @@ export default observer(function LogTable(){
                             key={"Add"}
                             icon={<Add />}
                             tooltipTitle={"Add"}
-                            onClick={() => setEditing(true)}
+                            onClick={() => openForm(undefined)}
                             />
                             <SpeedDialAction 
                             key={"Export"}

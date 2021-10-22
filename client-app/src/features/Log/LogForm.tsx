@@ -1,9 +1,8 @@
-import React, { ChangeEvent, FormEventHandler, SyntheticEvent, useState } from 'react';
+import React, { ChangeEvent,  SyntheticEvent, useState } from 'react';
 import { Box, Button, Checkbox, FormControlLabel, Modal, Stack, TextField, Typography } from '@mui/material';
 import { Formik } from 'formik';
 import AdapterLuxon from '@mui/lab/AdapterLuxon';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { DatePicker, TimePicker } from '@mui/lab';
 import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import { Check } from '@mui/icons-material';
@@ -40,7 +39,6 @@ export default observer(function LogForm(){
         createLog(log);
     }
 
-    // createLog(date, startTime, finishTime, 8)
     return(
         <Modal
             open={editMode}

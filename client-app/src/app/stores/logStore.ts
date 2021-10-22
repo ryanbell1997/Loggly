@@ -6,9 +6,10 @@ import { v4 as uuid } from 'uuid';
 
 export default class LogStore {
 
+
     logs = new Map<string, Log>();
     tableLogs : GridRowData[] = [];
-    selectedLog: Log | null = null;
+    selectedLog: Log | undefined = undefined;
     editMode: boolean = false;
     loading: boolean = false;
 
@@ -31,7 +32,7 @@ export default class LogStore {
         }
     }
 
-    loadLog = async(id: string) => {
+    updateLog = async(id: string) => {
         let log = this.getLog(id);
         if (log){
             this.selectedLog = log;
@@ -44,6 +45,7 @@ export default class LogStore {
                 this.setLog(log);
                 this.setSelectedLog(log)
                 this.setLoading(false);
+                this.setEditing(true);
                 return log;
             } catch(error){
                 console.log(error);
@@ -52,11 +54,24 @@ export default class LogStore {
         }
     }
 
+    editLog = async(log: Log) => {
+        this.loading = true;
+        try {
+          await agent.Logs.update(log);
+            this.setSelectedLog(log);
+            this.setEditing(false);
+            this.setLoading(false);
+        }
+        catch(error) {
+            console.log(error);
+            this.setLoading(false);
+        }
+    }
+
     createLog = async(log: Log) => {
         this.loading = true;
         try {
             log.id = uuid();
-            console.log(log);
             await agent.Logs.create(log);
             this.setTableLogs(log);
             this.setEditing(false);
@@ -81,23 +96,33 @@ export default class LogStore {
         }
     }
 
-    editLog = async(log: Log) => {
-        this.loading = true;
-        try {
-            await agent.Logs.update(log);
-        } catch (error) {
-            console.log(error);
-            this.setLoading(false);
-        }
+    openForm = (id?: string) => {
+        id ? this.selectLog(id) : this.cancelSelectedLog();
+        this.editMode = true
+    }
+
+    closeForm = () => {
+        this.editMode = false;
+    }
+
+    cancelSelectedLog = () => {
+        this.selectedLog = undefined;
     }
 
     private setTableLogs = (log : Log) => {
         this.tableLogs.push({id: log.id, date: log.date.split('T')[0], startTime: log.startTime, endTime: log.endTime, earnings: log.totalCharged})
+        this.logs.set(log.id, log);
     }
 
     private removeTableLog = (id: string) => {
         this.tableLogs = this.tableLogs.filter(x => x.id !== id);
+        this.removeLog(id);
     }
+    
+    private selectLog = (id: string) => {
+        this.selectedLog = this.logs.get(id);
+    }
+
 
     private removeLog = (id: string) => {
         this.logs.delete(id);
@@ -111,6 +136,7 @@ export default class LogStore {
         return this.logs.get(id);
     }
 
+    
     setSelectedLog = (log: Log) => {
         this.selectedLog = log;
     }
