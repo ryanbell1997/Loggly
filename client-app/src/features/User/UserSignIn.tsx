@@ -1,8 +1,12 @@
 import { Stack, TextField, Typography, Button, Divider } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+import FacebookSignIn from './FacebookSignIn';
 
 export default function UserSignIn(){
+    
+
+
     return (
         <Box sx={{width:'50%', margin:'2em auto'}}>
             <Stack spacing={2}>
@@ -11,7 +15,7 @@ export default function UserSignIn(){
                 <TextField type="password" id="password" name="paswword" label="Password" variant="outlined" />
                 <Button type="submit" variant="contained">Log In</Button>
                 <Divider variant="middle" />
-                <Typography variant='h5' sx={{textAlign:"center"}}>Social Log in here</Typography>
+                <FacebookSignIn />
             </Stack>
         </Box>
     );

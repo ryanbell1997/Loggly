@@ -33,8 +33,8 @@ const requests = {
 const Logs = {
     list: () => requests.get<Log[]>('/logs'),
     details: (id: string) => requests.get<Log>(`/logs/${id}`),
-    create: (log: Log) => requests.post<void>(`/logs/`, log),
-    update: (log: Log) => requests.put<void>(`/logs/${log.id}`, log),
+    create: (log: Log) => requests.post<Log>(`/logs/`, log),
+    update: (log: Log) => requests.put<Log>(`/logs/${log.id}`, log),
     delete: (id: string) => requests.delete<void>(`/logs/${id}`)
 }
 

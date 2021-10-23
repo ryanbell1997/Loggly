@@ -3,10 +3,9 @@ import { makeAutoObservable } from "mobx";
 import agent from "../api/agent";
 import { Log } from "../layout/models/log";
 import { v4 as uuid } from 'uuid';
+import DateShortener from "../../utils/DateShortener";
 
 export default class LogStore {
-
-
     logs = new Map<string, Log>();
     tableLogs : GridRowData[] = [];
     selectedLog: Log | undefined = undefined;
@@ -57,8 +56,8 @@ export default class LogStore {
     editLog = async(log: Log) => {
         this.loading = true;
         try {
-          await agent.Logs.update(log);
-            this.setSelectedLog(log);
+            const returnedLog = await agent.Logs.update(log);
+            this.editTableLogs(returnedLog);
             this.setEditing(false);
             this.setLoading(false);
         }
@@ -68,12 +67,21 @@ export default class LogStore {
         }
     }
 
+    createOrEditLog = async(log : Log) => {
+        if(log.id === ""){
+            this.createLog(log);
+        }
+        else {
+            this.editLog(log);
+        }
+    }
+
     createLog = async(log: Log) => {
         this.loading = true;
         try {
             log.id = uuid();
-            await agent.Logs.create(log);
-            this.setTableLogs(log);
+            const returnedLog : Log = await agent.Logs.create(log);
+            this.setTableLogs(returnedLog);
             this.setEditing(false);
             this.setLoading(false);
         } catch (error) {
@@ -103,6 +111,7 @@ export default class LogStore {
 
     closeForm = () => {
         this.editMode = false;
+        this.selectedLog = undefined;
     }
 
     cancelSelectedLog = () => {
@@ -110,8 +119,25 @@ export default class LogStore {
     }
 
     private setTableLogs = (log : Log) => {
-        this.tableLogs.push({id: log.id, date: log.date.split('T')[0], startTime: log.startTime, endTime: log.endTime, earnings: log.totalCharged})
+        log.date = DateShortener(log.date);
+        this.tableLogs.push(this.createTableLog(log));
         this.logs.set(log.id, log);
+    }
+
+    private editTableLogs = (log : Log) => {
+        log.date = DateShortener(log.date);
+        this.tableLogs = [...this.tableLogs.filter(x => x.id !== log.id), this.createTableLog(log)]
+        this.logs.set(log.id, log)
+    }
+
+    private createTableLog = (log : Log) => {
+        return {
+            id: log.id,
+            date: DateShortener(log.date),
+            startTime: log.startTime,
+            endTime: log.endTime,
+            earnings: log.totalCharged
+        }
     }
 
     private removeTableLog = (id: string) => {

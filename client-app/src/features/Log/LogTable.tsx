@@ -12,7 +12,7 @@ export default observer(function LogTable(){
 
     useEffect(() => {   
         loadLogs();
-      }, [])
+      }, [tableLogs])
 
     let rows: GridRowsProp = [...tableLogs];
 

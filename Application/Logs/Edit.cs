@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Utils;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -9,12 +10,12 @@ namespace Application.Logs
 {
     public class Edit
     {
-        public class Command : IRequest
+        public class Command : IRequest<Log>
         {
             public Log Log { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Log>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -25,15 +26,18 @@ namespace Application.Logs
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Log> Handle(Command request, CancellationToken cancellationToken)
             {
                 Log eLog = await _context.Logs.FindAsync(request.Log.Id);
-
+              
                 _mapper.Map(request.Log, eLog);
+
+                eLog.TotalTime = LogUtils.CalculateTotalTime(request.Log.StartTime, request.Log.EndTime);
+                eLog.TotalCharged = LogUtils.CalculateTotalEarnings(eLog.TotalTime, request.Log.HourlyRate);
 
                 await _context.SaveChangesAsync();
 
-                return Unit.Value;
+                return eLog;
             }
         }
     }
