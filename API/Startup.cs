@@ -11,6 +11,7 @@ using MediatR;
 using Application.Core;
 using AutoMapper;
 using API.Extensions;
+using FluentValidation.AspNetCore;
 
 namespace API
 {
@@ -26,7 +27,10 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers().AddNewtonsoftJson().AddFluentValidation(config =>
+            {
+                config.RegisterValidatorsFromAssemblyContaining<Create>();
+            });
             
             services.AddApplicationServices(_config);
         }

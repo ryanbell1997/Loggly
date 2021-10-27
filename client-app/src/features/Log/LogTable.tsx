@@ -1,20 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowParams, GridRowsProp } from '@mui/x-data-grid';
 import type {} from '@mui/x-data-grid/themeAugmentation';
-import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
+import { SpeedDial, SpeedDialAction, SpeedDialIcon, TextField } from '@mui/material';
 import { Add, Delete, Edit, FileDownload, Share } from '@mui/icons-material';
 import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 
 export default observer(function LogTable(){
     const {logStore} = useStore();
-    const {tableLogs, deleteLog, loadLogs, openForm} = logStore;
+    const {tableLogs, deleteLog, loadLogs, openForm, loading} = logStore;
 
     useEffect(() => {   
         loadLogs();
       }, [tableLogs])
 
     let rows: GridRowsProp = [...tableLogs];
+
+    const [date, setDate] = useState();
 
     const columns: GridColDef[] = React.useMemo(() => [
     { field: 'date', headerName: 'Date', flex:1 },
@@ -35,13 +37,30 @@ export default observer(function LogTable(){
     }
     ], [deleteLog]);
 
+    const handleDateChange = () => {
+
+    }
+
     return(
         <div style={{ height: 300, width: '100%'}}>
             <div style={{ display: 'flex', height: '100%' }}>
                 <div style={{ flexGrow: 1 }}>
-                    <DataGrid rows={rows} columns={columns} autoPageSize={true} autoHeight={true}/>
+                    <TextField
+                        id="filteredDateTime"
+                        label="Filter by Month/Year"
+                        type="month"
+                        name="filteredDateTime"
+                        value={date}
+                        onChange={handleDateChange}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        sx={{ marginTop: "1.2em", marginLeft: "1.2em", marginBottom: "1.2em"}}
+                         />
+                        
+                    <DataGrid rows={rows} columns={columns} autoPageSize={true} autoHeight={true} loading={loading}/>
                     <SpeedDial
-                        ariaLabel="SpeedDial basic example"
+                        ariaLabel="logToolBar"
                         sx={{ position: 'absolute', bottom: 100, right: 16 }}
                         icon={<SpeedDialIcon />}
                         >

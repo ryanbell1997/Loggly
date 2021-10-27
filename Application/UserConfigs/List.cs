@@ -3,21 +3,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain;
 using System.Threading;
-using System.Linq;
 using Persistence;
 using Microsoft.EntityFrameworkCore;
-using Application.Core;
 
-namespace Application.Logs
+namespace Application.UserConfigs
 {
     public class List
     {
-        public class Query : IRequest<Result<List<Log>>> 
+        public class Query : IRequest<List<UserConfig>>
         {
 
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<Log>>>
+        public class Handler : IRequestHandler<Query, List<UserConfig>>
         {
             private readonly DataContext _context;
             public Handler(DataContext context)
@@ -25,9 +23,9 @@ namespace Application.Logs
                 _context = context;
             }
 
-            public async Task<Result<List<Log>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<UserConfig>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return Result<List<Log>>.Success(await _context.Logs.OrderByDescending(x => x.Date).ToListAsync());
+                return await _context.UserConfigs.ToListAsync();
             }
         }
 

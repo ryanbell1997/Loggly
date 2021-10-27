@@ -5,6 +5,7 @@ using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Application.Logs;
 using MediatR;
+using Application.Core;
 
 namespace API.Controllers
 {
@@ -15,33 +16,39 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Log>>> GetAllLogs()
+        public async Task<IActionResult> GetAllLogs()
         {
-            return await Mediator.Send(new List.Query());
+            return HandleResult(await Mediator.Send(new List.Query()));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Log>> GetLog(Guid id)
+        public async Task<IActionResult> GetLog(Guid id)
         {
-            return await Mediator.Send(new Details.Query{Id = id});
+            return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateLog([FromBody]Log log)
         {
-            return Ok(await Mediator.Send(new Create.Command{Log = log}));
+            return HandleResult(await Mediator.Send(new Create.Command{Log = log}));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLog(Guid id)
         {
-            return Ok(await Mediator.Send(new Delete.Command{Id = id}));
+            return HandleResult(await Mediator.Send(new Delete.Command{Id = id}));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> EditLog(Guid id, Log log)
         {
-            return Ok(await Mediator.Send(new Edit.Command{Log = log}));
+            return HandleResult(await Mediator.Send(new Edit.Command{Log = log}));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetLogsByDate(DateTime monthYear)
+        {
+            return HandleResult(await Mediator.Send(new GetLogsByDate.Command { MonthYear = monthYear}));
         }
 
     }

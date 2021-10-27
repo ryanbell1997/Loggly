@@ -10,6 +10,6 @@ namespace Persistence
         }
 
         public DbSet<Log> Logs { get; set; }
-        //UserConfig DbSetRequired
+        public DbSet<UserConfig> UserConfigs { get; set; }
     }
 }
