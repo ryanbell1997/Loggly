@@ -9,6 +9,7 @@ import UserAccount from '../../features/User/UserAccount';
 import UserSignIn from '../../features/User/UserSignIn';
 import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/Errors/NotFound';
+import ServerError from '../../features/Errors/ServerError';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
           <Route exact path='/log' component={LogTable} />
           <Route path='/user/account' component={UserAccount} />
           <Route path='/user/signin' component={UserSignIn} />
+          <Route path='/server-error' component={ServerError} />
           <Route component={NotFound} />
         </Switch>
         {/* location.key to clear fields. Key changes.*/}
