@@ -45,7 +45,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Edit.Command{Log = log}));
         }
 
-        [HttpPost]
+        [HttpGet("/{monthYear}")]
         public async Task<IActionResult> GetLogsByDate(DateTime monthYear)
         {
             return HandleResult(await Mediator.Send(new GetLogsByDate.Command { MonthYear = monthYear}));

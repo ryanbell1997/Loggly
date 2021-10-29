@@ -18,8 +18,10 @@ export default class LogStore {
     
     loadLogs = async () => { 
         this.loading = true;
+        
         try {
             const logs = await agent.Logs.list(); 
+            this.clearTableLogs();
             logs.forEach(log => {
                 this.setTableLogs(log);
                 })
@@ -116,6 +118,10 @@ export default class LogStore {
 
     cancelSelectedLog = () => {
         this.selectedLog = undefined;
+    }
+
+    private clearTableLogs = () => {
+        this.tableLogs = [];
     }
 
     private setTableLogs = (log : Log) => {
