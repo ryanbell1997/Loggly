@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Logs;
 using MediatR;
 using Application.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
