@@ -12,5 +12,6 @@ namespace Domain
         public decimal HourlyRate { get; set; }
         public decimal TotalCharged { get; set; }
         public bool is_overtime { get; set; }
+        public string UserId { get; set; }
     }
 }

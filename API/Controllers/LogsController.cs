@@ -16,10 +16,10 @@ namespace API.Controllers
         {
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllLogs()
+        [HttpGet("getLogs/{userId}")]
+        public async Task<IActionResult> GetAllLogs(string userId)
         {
-            return HandleResult(await Mediator.Send(new List.Query()));
+            return HandleResult(await Mediator.Send(new List.Query { UserId = userId }));
         }
 
         [HttpGet("{id}")]
@@ -28,6 +28,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateLog([FromBody]Log log)
         {
@@ -51,6 +52,12 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new GetLogsByDate.Command { MonthYear = monthYear}));
         }
+
+        //[HttpGet("/monthlyLogQuantity")]
+        //public async Task<IActionResult> GetMonthlyLogQuantities()
+        //{
+            //return HandleResult(await Mediator.Send(new MonthlyLogQuantities.Query()));
+        //}
 
     }
 }

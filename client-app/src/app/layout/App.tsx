@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import NavBar from './NavBar';
 import LogTable from '../../features/Log/LogTable';
 import LogForm from '../../features/Log/LogForm';
@@ -10,8 +10,21 @@ import UserSignIn from '../../features/User/UserSignIn';
 import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/Errors/NotFound';
 import ServerError from '../../features/Errors/ServerError';
+import RegistrationForm from '../../features/User/RegistrationForm';
+import { useStore } from '../stores/store';
 
 function App() {
+  const {generalStore, userStore} = useStore();
+
+  useEffect(() => {
+    if (generalStore.token){
+      userStore.getUser().finally(() => generalStore.setAppLoaded());
+    } else {
+      generalStore.setAppLoaded();
+    }
+  }, [generalStore, userStore])
+
+  if(!generalStore.appLoaded) return (<div><p>Loading...</p></div>)
 
   return (
     <Fragment>
@@ -23,6 +36,7 @@ function App() {
           <Route exact path='/log' component={LogTable} />
           <Route path='/user/account' component={UserAccount} />
           <Route path='/user/signin' component={UserSignIn} />
+          <Route path='/user/register' component={RegistrationForm} />
           <Route path='/server-error' component={ServerError} />
           <Route component={NotFound} />
         </Switch>

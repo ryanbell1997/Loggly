@@ -7,14 +7,15 @@ using System.Linq;
 using Persistence;
 using Microsoft.EntityFrameworkCore;
 using Application.Core;
+using System;
 
 namespace Application.Logs
 {
-    public class List
+    public class MonthlyLogQuantities
     {
-        public class Query : IRequest<Result<List<Log>>> 
+        public class Query : IRequest<Result<List<Log>>>
         {
-            public string UserId { get; set; }
+
         }
 
         public class Handler : IRequestHandler<Query, Result<List<Log>>>
@@ -27,7 +28,11 @@ namespace Application.Logs
 
             public async Task<Result<List<Log>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return Result<List<Log>>.Success(await _context.Logs.Where(x => x.UserId == request.UserId).OrderByDescending(x => x.Date).ToListAsync());
+                int year = DateTime.Now.Year;
+
+                await _context.Logs.Where(x => x.Date.Year == year).GroupBy(x => x.Date.Month).ToListAsync();
+
+                return Result<List<Log>>.Success(await _context.Logs.OrderByDescending(x => x.Date).ToListAsync());
             }
         }
 

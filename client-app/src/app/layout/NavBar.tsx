@@ -29,7 +29,7 @@ export default observer(function NavBar(){
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     Loggly
                 </Typography>
-                    <Button color="inherit" component={NavLink} to={generalStore.isSignedIn ? '/user/account' : '/user/signin'} ><Avatar /></Button>
+                    <Button color="inherit" component={NavLink} to={generalStore.token ? '/user/account' : '/user/signin'} ><Avatar /></Button>
                 </Toolbar>
             </AppBar>
     </Box>

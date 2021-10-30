@@ -1,18 +1,22 @@
-import React, { ChangeEvent,  SyntheticEvent, useEffect, useState } from 'react';
-import { Box, Button, Checkbox, FormControlLabel, Modal, Stack, TextField, Typography } from '@mui/material';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
+import { Box, Button, Checkbox, FormControlLabel, Modal, Stack, Typography } from '@mui/material';
 import AdapterLuxon from '@mui/lab/AdapterLuxon';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import { Check } from '@mui/icons-material';
 import { Log } from '../../app/layout/models/log';
-import { Form, Formik, useFormik } from 'formik';
+import { Formik, useFormik } from 'formik';
 import * as Yup from 'yup';
+import TextInput from '../../app/layout/inputs/TextInput';
+import DateInput from '../../app/layout/inputs/DateInput';
+import TimeInput from '../../app/layout/inputs/TimeInput';
 
 export default observer(function LogForm(){
 
-    const { logStore } = useStore();
+    const { logStore, userStore } = useStore();
     const { editMode, selectedLog, createOrEditLog, closeForm } = logStore;
+    const { user } = userStore;
 
     let myLog: Log | null = null;
     if(selectedLog !== undefined) myLog = {...selectedLog}
@@ -23,7 +27,8 @@ export default observer(function LogForm(){
         endTime: '',
         hourlyRate: 0,
         totalCharged: 0,
-        is_overtime: false
+        is_overtime: false,
+        userId: user?.id
     };
 
     useEffect(() => {
@@ -34,24 +39,9 @@ export default observer(function LogForm(){
     const [priceOverride, setPriceOverride] = useState(false);
 
     const validationSchema = Yup.object({
-        date: Yup.date().required('A date is required')
+        date: Yup.date().required('A date is required'),
+        Name: Yup.string().min(5)
     }) 
-
-    const formik = useFormik({
-        initialValues: {
-            id: '',
-            date: '',
-            startTime: '',
-            endTime: '',
-            hourlyRate: 0,
-            totalCharged: 0,
-            is_overtime: false
-        },
-        validationSchema: validationSchema,
-        onSubmit: (values) => {
-            console.log(values);
-        }
-    })
 
     // const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     //     const { name, value } = e.target;
@@ -61,10 +51,9 @@ export default observer(function LogForm(){
     //     });
     // }
 
-    // const handleSubmit = (e: SyntheticEvent) => {
-    //     e.preventDefault();
-    //     createOrEditLog(log);
-    // }
+    const handleSubmit = (values:any) => {;
+        createOrEditLog(values);
+    }
 
     return(
         <Modal
@@ -75,65 +64,38 @@ export default observer(function LogForm(){
             >
             <Box sx={{ backgroundColor: 'white', width: '85%', margin: '5em auto' }}>
                 <Box sx={{width: '90%', margin: "0px auto", paddingTop:"1.5em", paddingBottom:"1.5em"}}>
-                    <form onSubmit={formik.handleSubmit} autoComplete="off">
-                        <LocalizationProvider dateAdapter={AdapterLuxon}>
-                            <Stack spacing={2}>
-                                <Typography variant={"h5"} sx={{fontWeight:"bold"}}>Add Entry</Typography>
-                                <TextField
-                                    id="date"
-                                    label="Date"
-                                    type="date"
-                                    name="date"
-                                    value={formik.values.date}
-                                    error={formik.touched.date}
-                                    helperText={formik.touched.date}
-                                    InputLabelProps={{
-                                    shrink: true,
-                                    }}
-                                    onChange={formik.handleChange}
-                                />
-                                <TextField
-                                    id="startTime"
-                                    label="Start Time"
-                                    type="time"
-                                    name="startTime"
-                                    value={formik.values.startTime}
-                                    onChange={formik.handleChange}
-                                    InputLabelProps={{
-                                    shrink: true,
-                                    }}
-                                    inputProps={{
-                                    step: 300, // 5 min
-                                    }}
-                                />
-                                <TextField
-                                    id="endTime"
-                                    label="End Time"
-                                    type="time"
-                                    name="endTime"
-                                    value={formik.values.endTime}
-                                    onChange={formik.handleChange}
-                                    InputLabelProps={{
-                                    shrink: true,
-                                    }}
-                                    inputProps={{
-                                    step: 300, // 5 min
-                                    }}
-                                />
-                                <FormControlLabel label="Override Hourly Price" control={
-                                    <Checkbox 
-                                        value={priceOverride}
-                                        onChange={(newValue) => {
-                                            setPriceOverride(newValue.target.checked);
-                                        }}
-                                        name="overridePrice"
-                                    />
-                                } />
-                                <TextField id="hourlyRate" label="Hourly Rate" variant="outlined" value={formik.values.hourlyRate} onChange={formik.handleChange} disabled={priceOverride ? false : true} name="hourlyRate" />
-                                <Button variant="contained" type="submit" color="success" endIcon={<Check />}>Submit</Button>
-                            </Stack>
-                        </LocalizationProvider>
-                    </form>                        
+                    <Formik 
+                    initialValues={{...initialState}} 
+                    validationSchema={validationSchema}
+                    onSubmit={values => handleSubmit(values)} >
+                        {({ getFieldProps, handleSubmit }) => (
+                            <form onSubmit={handleSubmit} autoComplete="off">
+                            <LocalizationProvider dateAdapter={AdapterLuxon}>
+                                <Stack spacing={2}>
+                                    <Typography variant={"h5"} sx={{fontWeight:"bold"}}>Add Entry</Typography>
+                      
+                                    <DateInput idName="date" label="Date"/>
+                                    <TimeInput idName="startTime" label="Start Time" />
+                                    <TimeInput idName="endTime" label="End Time" />
+
+                                    <FormControlLabel label="Override Hourly Price" control={
+                                        <Checkbox 
+                                            value={priceOverride}
+                                            onChange={(newValue) => {
+                                                setPriceOverride(newValue.target.checked);
+                                            }}
+                                            name="overridePrice"
+                                        />
+                                    } />
+
+                                    <TextInput idName="hourlyRate" type={"number"} label={"Hourly Rate"} placeholder={"10"} disabled={priceOverride ? false : true} />
+                                    <Button variant="contained" type="submit" color="success" endIcon={<Check />}>Submit</Button>
+                                </Stack>
+                            </LocalizationProvider>
+                        </form>
+                        )}
+                         
+                    </Formik>                        
                 </Box>
             </Box>
         </Modal>

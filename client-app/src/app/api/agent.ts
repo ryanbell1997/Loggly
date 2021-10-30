@@ -1,8 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { request } from 'http';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import { Log } from '../layout/models/log';
-import { User } from '../layout/models/user';
+import { User, UserFormValues } from '../layout/models/user';
 import generalStore from '../stores/generalStore';
 import { store } from '../stores/store';
 
@@ -13,6 +14,12 @@ const sleep = (delay: number) => {
 }
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
+
+axios.interceptors.request.use(config => {
+    const token = store.generalStore.token;
+    if(token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+})
 
 axios.interceptors.response.use(async response => {
 
@@ -51,7 +58,7 @@ axios.interceptors.response.use(async response => {
             break;
     }
     return Promise.reject(error);
-} )
+})
 
 
 
@@ -66,7 +73,8 @@ const requests = {
 }
 
 const Logs = {
-    list: () => requests.get<Log[]>('/logs'),
+    list: (userId: string) => requests.get<Log[]>(`/logs/getLogs/${userId}`),
+    quantityMonthlyLogs: () => requests.get<number[]>('/logs/monthlyLogQuantity'),
     details: (id: string) => requests.get<Log>(`/logs/${id}`),
     create: (log: Log) => requests.post<Log>(`/logs/`, log),
     update: (log: Log) => requests.put<Log>(`/logs/${log.id}`, log),
@@ -79,9 +87,16 @@ const Users = {
     delete: (id: string) => requests.delete<void>(`/user/${id}`)
 }
 
+const Account = {
+    login: (user: UserFormValues) => requests.post<User>('/account/login', user),
+    register: (user: UserFormValues) => requests.post<User>('/account/register', user),
+    current: () => requests.get<User>('/account')
+}
+
 const agent = {
     Logs,
-    Users
+    Users,
+    Account
 }
 
 export default agent

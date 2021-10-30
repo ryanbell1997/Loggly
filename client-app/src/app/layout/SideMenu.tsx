@@ -1,6 +1,6 @@
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import React, { Fragment } from 'react';
-import { CalendarToday, Dashboard } from '@mui/icons-material';
+import { CalendarToday, Dashboard, Logout } from '@mui/icons-material';
 import { useStore } from '../stores/store';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
@@ -9,8 +9,9 @@ import { Link } from 'react-router-dom';
 
 export default observer(function SideMenu(){
 
-    const {generalStore} = useStore();
+    const {generalStore, userStore} = useStore();
     const {setMenuOpenStatus, isMenuOpen} = generalStore;
+    const {logout} = userStore;
 
     return(
         <Fragment>
@@ -30,13 +31,22 @@ export default observer(function SideMenu(){
                 </ListItem>
 
                 <ListItem component={Link} to='/log' onClick={() => setMenuOpenStatus(false)} >
-                <ListItemButton>
-                <ListItemIcon>
-                    <CalendarToday />
-                </ListItemIcon>
-                <ListItemText primary="My Log" />
-                </ListItemButton>
-            </ListItem>
+                    <ListItemButton>
+                    <ListItemIcon>
+                        <CalendarToday />
+                    </ListItemIcon>
+                    <ListItemText primary="My Log" />
+                    </ListItemButton>
+                </ListItem>
+
+                <ListItem onClick={() => logout()} sx={{position: 'fixed', bottom: "0", textAlign: "center", paddingBottom:"1em", width: "auto" }}>
+                    <ListItemButton>
+                    <ListItemIcon>
+                        <Logout />
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" />
+                    </ListItemButton>
+                </ListItem>
             </List>
             </Drawer>
       </Fragment>

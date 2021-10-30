@@ -4,6 +4,7 @@ import agent from "../api/agent";
 import { Log } from "../layout/models/log";
 import { v4 as uuid } from 'uuid';
 import DateShortener from "../../utils/DateShortener";
+import { store } from "./store";
 
 export default class LogStore {
     logs = new Map<string, Log>();
@@ -16,21 +17,27 @@ export default class LogStore {
         makeAutoObservable(this);
     }
     
-    loadLogs = async () => { 
+    private _loadLogs = async () => {
         this.loading = true;
-        
+
         try {
-            const logs = await agent.Logs.list(); 
+            const logs = await agent.Logs.list(store.userStore?.user?.id!);
             this.clearTableLogs();
             logs.forEach(log => {
                 this.setTableLogs(log);
-                })
+            });
             this.setLoading(false);
 
-        } catch (error){
+        } catch (error) {
             console.log(error);
             this.setLoading(false);
         }
+    };
+    public get loadLogs() {
+        return this._loadLogs;
+    }
+    public set loadLogs(value) {
+        this._loadLogs = value;
     }
 
     updateLog = async(id: string) => {
@@ -118,6 +125,10 @@ export default class LogStore {
 
     cancelSelectedLog = () => {
         this.selectedLog = undefined;
+    }
+
+    getMonthlyLogQuantity = () => {
+           
     }
 
     private clearTableLogs = () => {
