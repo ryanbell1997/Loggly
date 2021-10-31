@@ -2,7 +2,7 @@ import { TextField } from '@mui/material'
 import { useField } from 'formik'
 import React from 'react'
 interface Props {
-    placeholder: string;
+    placeholder?: string;
     idName: string;
     label: string;
     type?: string;
@@ -16,9 +16,9 @@ export default function TextInput({placeholder, idName, label, type, disabled}: 
             id={idName}
             name={idName}
             label={label}
-            value={field.value}
+            value={field.value || ''}
             type={type ?? "text"}
-            placeholder={placeholder}
+            placeholder={placeholder ?? ""}
             error={meta.touched && !!meta.error}
             helperText={meta.touched && meta.error}
             onChange={field.onChange} 

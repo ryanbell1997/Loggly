@@ -1,10 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { request } from 'http';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import { Log } from '../layout/models/log';
-import { User, UserFormValues } from '../layout/models/user';
-import generalStore from '../stores/generalStore';
+import { User, UserFormValues, UserConfig } from '../layout/models/user';
 import { store } from '../stores/store';
 
 const sleep = (delay: number) => {
@@ -29,10 +27,10 @@ axios.interceptors.response.use(async response => {
     const { data, status, config } = error.response!;
     switch(status){
         case 400:
-            if(typeof data == 'string'){
+            if(typeof data === 'string'){
                 toast.error(data);
             }
-            if(config.method == 'get' && data.errors.hasOwnProperty('id')){
+            if(config.method === 'get' && data.errors.hasOwnProperty('id')){
                 history.push('/not-found');
             }
             if(data.errors){
@@ -73,7 +71,7 @@ const requests = {
 }
 
 const Logs = {
-    list: (userId: string) => requests.get<Log[]>(`/logs/getLogs/${userId}`),
+    list: (userId: string) => requests.get<Log[]>(`/logs/${userId}`),
     quantityMonthlyLogs: () => requests.get<number[]>('/logs/monthlyLogQuantity'),
     details: (id: string) => requests.get<Log>(`/logs/${id}`),
     create: (log: Log) => requests.post<Log>(`/logs/`, log),
@@ -90,7 +88,9 @@ const Users = {
 const Account = {
     login: (user: UserFormValues) => requests.post<User>('/account/login', user),
     register: (user: UserFormValues) => requests.post<User>('/account/register', user),
-    current: () => requests.get<User>('/account')
+    current: () => requests.get<User>('/account'),
+    getAccountInfo: () => requests.get<UserConfig>('/account/getAccountInfo'),
+    saveUserConfig: (config: UserConfig) => requests.put<UserConfig>(`/userconfig/${config.userConfigId}`, config)
 }
 
 const agent = {

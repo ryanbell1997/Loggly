@@ -7,6 +7,8 @@ using API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Persistence;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -18,12 +20,14 @@ namespace API.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly TokenService _tokenService;
+        private readonly DataContext _context;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService, DataContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
+            _context = context;
         }
 
         [Authorize]
@@ -60,6 +64,9 @@ namespace API.Controllers
 
             if (!result.IsFaulted)
             {
+                await _context.UserConfigs.AddAsync(new UserConfig { UserId = user.Id });
+                await _context.SaveChangesAsync();
+
                 return CreateUserObject(user);
             }
 
@@ -73,6 +80,38 @@ namespace API.Controllers
             var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
             return CreateUserObject(user);
+        }
+
+        [Authorize]
+        [HttpGet("getAccountInfo")]
+        public async Task<ActionResult<AccountInfoDto>> GetAccountInfo()
+        {
+            AccountInfoDto accountInfoDto = new();
+
+            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+
+            if(user is not null)
+            {
+                var userConfig = await _context.UserConfigs.Where(x => x.UserId == user.Id).FirstOrDefaultAsync();
+
+                if (userConfig is not null)
+                {
+                    accountInfoDto.Email = user.Email;
+                    accountInfoDto.Username = user.UserName;
+                    accountInfoDto.HourlyRate = userConfig.HourlyRate;
+                    accountInfoDto.Currency = userConfig.Currency;
+                    accountInfoDto.ColourScheme = userConfig.ColourScheme;
+                    accountInfoDto.UserConfigId = userConfig.Id;
+                }
+                else
+                {
+                    await _context.UserConfigs.AddAsync(new UserConfig { UserId = user.Id });
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            return accountInfoDto;
+
         }
 
         private UserDto CreateUserObject(AppUser user)

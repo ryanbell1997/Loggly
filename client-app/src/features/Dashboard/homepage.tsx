@@ -1,4 +1,4 @@
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { Bar, Line } from 'react-chartjs-2';
@@ -48,10 +48,10 @@ export default function HomePage(){
                         <Bar data={data} options={options}/>
                     </Paper>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={12}>
                     <Paper sx={{height:"200px"}}><Line data={lineEarningsData} options={options}/></Paper>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={12}>
                     <Paper sx={{height:"200px"}}><Line data={lineData} options={options}/></Paper>
                 </Grid>
             </Grid>

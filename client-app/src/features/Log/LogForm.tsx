@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Checkbox, FormControlLabel, Modal, Stack, Typography } from '@mui/material';
 import AdapterLuxon from '@mui/lab/AdapterLuxon';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -6,7 +6,7 @@ import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import { Check } from '@mui/icons-material';
 import { Log } from '../../app/layout/models/log';
-import { Formik, useFormik } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextInput from '../../app/layout/inputs/TextInput';
 import DateInput from '../../app/layout/inputs/DateInput';
@@ -16,7 +16,7 @@ export default observer(function LogForm(){
 
     const { logStore, userStore } = useStore();
     const { editMode, selectedLog, createOrEditLog, closeForm } = logStore;
-    const { user } = userStore;
+    const { user, userConfig } = userStore;
 
     let myLog: Log | null = null;
     if(selectedLog !== undefined) myLog = {...selectedLog}
@@ -25,7 +25,7 @@ export default observer(function LogForm(){
         date: '',
         startTime: '',
         endTime: '',
-        hourlyRate: 0,
+        hourlyRate: userConfig?.hourlyRate,
         totalCharged: 0,
         is_overtime: false,
         userId: user?.id
@@ -42,14 +42,6 @@ export default observer(function LogForm(){
         date: Yup.date().required('A date is required'),
         Name: Yup.string().min(5)
     }) 
-
-    // const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    //     const { name, value } = e.target;
-    //     setLog({
-    //         ...log,
-    //         [name]:value
-    //     });
-    // }
 
     const handleSubmit = (values:any) => {;
         createOrEditLog(values);
@@ -78,7 +70,7 @@ export default observer(function LogForm(){
                                     <TimeInput idName="startTime" label="Start Time" />
                                     <TimeInput idName="endTime" label="End Time" />
 
-                                    <FormControlLabel label="Override Hourly Price" control={
+                                    {/* <FormControlLabel label="Override Hourly Price" control={
                                         <Checkbox 
                                             value={priceOverride}
                                             onChange={(newValue) => {
@@ -86,7 +78,7 @@ export default observer(function LogForm(){
                                             }}
                                             name="overridePrice"
                                         />
-                                    } />
+                                    } /> */}
 
                                     <TextInput idName="hourlyRate" type={"number"} label={"Hourly Rate"} placeholder={"10"} disabled={priceOverride ? false : true} />
                                     <Button variant="contained" type="submit" color="success" endIcon={<Check />}>Submit</Button>

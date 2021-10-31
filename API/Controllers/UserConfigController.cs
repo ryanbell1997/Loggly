@@ -43,7 +43,7 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> EditUserConfig(Guid id, UserConfig userConfig)
         {
-            return Ok(await Mediator.Send(new Edit.Command { UserConfig = userConfig }));
+            return Ok(await Mediator.Send(new Edit.Command { UserConfig = userConfig, UserConfigId = id }));
         }
 
     }

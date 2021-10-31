@@ -1,13 +1,14 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { history } from "../..";
 import agent from "../api/agent";
-import { User, UserFormValues } from "../layout/models/user";
+import { UserConfig, User, UserFormValues } from "../layout/models/user";
 import { store } from "./store";
 
 export default class UserStore {
     user: User | null = null;
     name: string = '';
     hourlyRate: number = 15;
+    userConfig : UserConfig | null = null;
 
     constructor() {
         makeAutoObservable(this);
@@ -59,14 +60,25 @@ export default class UserStore {
         }
     }
 
+    getAccountInfo = async () => {
+        try {
+            const accountInfo = await agent.Account.getAccountInfo();
+            runInAction(() => {
+                this.userConfig = accountInfo;
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-    setHourlyRate = async (rate: number) => {
-        if(rate > 0) {
-            try {
-                // await agent.Users.update()
-            } catch (error){
-                console.log(error);
-            }
+    saveConfig = async (config: UserConfig) => {
+        try {
+            var userConfig = await agent.Account.saveUserConfig(config)
+            runInAction(() => {
+                this.userConfig = userConfig;
+            })
+        } catch (error){
+            console.log(error);
         }
     }
 

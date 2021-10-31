@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Application.Utils;
 using AutoMapper;
@@ -13,6 +14,7 @@ namespace Application.UserConfigs
         public class Command : IRequest<UserConfig>
         {
             public UserConfig UserConfig { get; set; }
+            public Guid UserConfigId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, UserConfig>
@@ -28,9 +30,14 @@ namespace Application.UserConfigs
 
             public async Task<UserConfig> Handle(Command request, CancellationToken cancellationToken)
             {
-                UserConfig eUserConfig = await _context.UserConfigs.FindAsync(request.UserConfig.Id);
+                UserConfig eUserConfig = await _context.UserConfigs.FindAsync(request.UserConfigId);
 
-                _mapper.Map(request.UserConfig, eUserConfig);
+                eUserConfig.Id = request.UserConfigId;
+                eUserConfig.Currency = request.UserConfig.Currency;
+                eUserConfig.HourlyRate = request.UserConfig.HourlyRate;
+                eUserConfig.ColourScheme = request.UserConfig.ColourScheme;
+
+                //_mapper.Map(request.UserConfig, eUserConfig);
 
                 await _context.SaveChangesAsync();
 

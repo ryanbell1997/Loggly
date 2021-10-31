@@ -16,19 +16,18 @@ namespace API.Controllers
         {
         }
 
-        [HttpGet("getLogs/{userId}")]
+        [HttpGet("{userId}")]
         public async Task<IActionResult> GetAllLogs(string userId)
         {
             return HandleResult(await Mediator.Send(new List.Query { UserId = userId }));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("getLog/{id}")]
         public async Task<IActionResult> GetLog(Guid id)
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateLog([FromBody]Log log)
         {
