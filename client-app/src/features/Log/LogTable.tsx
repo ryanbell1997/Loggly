@@ -37,15 +37,11 @@ export default observer(function LogTable(){
     }
     ], [deleteLog]);
 
-    const handleDateChange = () => {
-
-    }
-
     return(
         <div style={{ height: 300, width: '100%'}}>
             <div style={{ display: 'flex', height: '100%' }}>
                 <div style={{ flexGrow: 1 }}>
-                    <TextField
+                    {/* <TextField
                         id="filteredDateTime"
                         label="Filter by Month/Year"
                         type="month"
@@ -57,7 +53,7 @@ export default observer(function LogTable(){
                         }}
                         sx={{ marginTop: "1.2em", marginLeft: "1.2em", marginBottom: "1.2em"}}
                          />
-                        
+                         */}
                     <DataGrid rows={rows} columns={columns} autoPageSize={true} autoHeight={true} loading={loading}/>
                     <SpeedDial
                         ariaLabel="logToolBar"

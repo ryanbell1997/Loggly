@@ -18,10 +18,8 @@ export interface RegistrationFormValues {
 }
 
 export interface UserConfig {
-    userConfigId: string,
-    email: string,
-    username: string,
-    hourlyRate: number,
-    currency: string,
-    colourScheme: string,
+    id: string;
+    hourlyRate: number;
+    colourScheme: string;
+    currency: string;
 }

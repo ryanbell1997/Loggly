@@ -52,11 +52,11 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetLogsByDate.Command { MonthYear = monthYear}));
         }
 
-        //[HttpGet("/monthlyLogQuantity")]
-        //public async Task<IActionResult> GetMonthlyLogQuantities()
-        //{
-            //return HandleResult(await Mediator.Send(new MonthlyLogQuantities.Query()));
-        //}
+        [HttpGet("/monthlyLogQuantity")]
+        public async Task<IActionResult> GetMonthlyLogQuantities()
+        {
+            return HandleResult(await Mediator.Send(new MonthlyLogQuantities.Query()));
+        }
 
     }
 }

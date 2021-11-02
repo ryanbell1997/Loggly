@@ -48,10 +48,10 @@ export default function HomePage(){
                         <Bar data={data} options={options}/>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} sm={6}>
                     <Paper sx={{height:"200px"}}><Line data={lineEarningsData} options={options}/></Paper>
                 </Grid>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} sm={6}>
                     <Paper sx={{height:"200px"}}><Line data={lineData} options={options}/></Paper>
                 </Grid>
             </Grid>

@@ -60,11 +60,11 @@ export default class UserStore {
         }
     }
 
-    getAccountInfo = async () => {
+    getUserConfig = async () => {
         try {
-            const accountInfo = await agent.Account.getAccountInfo();
+            const userConfig = await agent.Account.getAccountInfo();
             runInAction(() => {
-                this.userConfig = accountInfo;
+                this.userConfig = userConfig;
             })
         } catch (error) {
             console.log(error);

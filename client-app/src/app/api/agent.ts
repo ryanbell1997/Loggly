@@ -90,7 +90,7 @@ const Account = {
     register: (user: UserFormValues) => requests.post<User>('/account/register', user),
     current: () => requests.get<User>('/account'),
     getAccountInfo: () => requests.get<UserConfig>('/account/getAccountInfo'),
-    saveUserConfig: (config: UserConfig) => requests.put<UserConfig>(`/userconfig/${config.userConfigId}`, config)
+    saveUserConfig: (config: UserConfig) => requests.put<UserConfig>(`/userconfig/${config.id}`, config)
 }
 
 const agent = {

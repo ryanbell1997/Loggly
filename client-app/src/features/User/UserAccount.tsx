@@ -11,19 +11,19 @@ import { useStore } from '../../app/stores/store';
 
 export default observer(function UserAccount(){
     const { userStore} = useStore();
-    const { userConfig, getAccountInfo, saveConfig } =  userStore;
+    const { userConfig, getUserConfig, saveConfig } =  userStore;
 
     useEffect(() => {
-        if(userConfig == null) getAccountInfo()
+        if(userConfig == null){
+            getUserConfig()
+        } 
     }, [userConfig])
 
     const initialValues: UserConfig = userConfig ?? {
-        userConfigId: '',
-        email: '',
+        id: '',
         colourScheme: '',
         hourlyRate: 0,
         currency: '',
-        username: ''
     };
 
     return (
