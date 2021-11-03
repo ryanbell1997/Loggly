@@ -30,7 +30,7 @@ export default observer(function UserAccount(){
         <Box>
             <Paper sx={{margin: "2em auto", width:"90%"}}>
                 <Box sx={{width:'90%', padding: '1em', margin: '0px auto'}}>
-                    <Typography variant='h3'>My Account</Typography>
+                    <Typography variant='h3' sx={{fontFamily:'Raleway'}}>My Account</Typography>
                     <Divider/>
                     <Box sx={{paddingTop: '1em'}}>
                         <Formik

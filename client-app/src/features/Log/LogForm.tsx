@@ -11,6 +11,7 @@ import * as Yup from 'yup';
 import TextInput from '../../app/layout/inputs/TextInput';
 import DateInput from '../../app/layout/inputs/DateInput';
 import TimeInput from '../../app/layout/inputs/TimeInput';
+import { LoadingButton } from '@mui/lab';
 
 export default observer(function LogForm(){
 
@@ -40,7 +41,9 @@ export default observer(function LogForm(){
 
     const validationSchema = Yup.object({
         date: Yup.date().required('A date is required'),
-        Name: Yup.string().min(5)
+        startTime: Yup.string().required('A start time is required'),
+        endTime: Yup.string().required('An end time is required'),
+        hourlyRate: Yup.number().required('An hourly rate is required')
     }) 
 
     const handleSubmit = (values:any) => {;
@@ -60,7 +63,7 @@ export default observer(function LogForm(){
                     initialValues={{...initialState}} 
                     validationSchema={validationSchema}
                     onSubmit={values => handleSubmit(values)} >
-                        {({ getFieldProps, handleSubmit }) => (
+                        {({ handleSubmit, isSubmitting }) => (
                             <form onSubmit={handleSubmit} autoComplete="off">
                             <LocalizationProvider dateAdapter={AdapterLuxon}>
                                 <Stack spacing={2}>
@@ -69,19 +72,8 @@ export default observer(function LogForm(){
                                     <DateInput idName="date" label="Date"/>
                                     <TimeInput idName="startTime" label="Start Time" />
                                     <TimeInput idName="endTime" label="End Time" />
-
-                                    {/* <FormControlLabel label="Override Hourly Price" control={
-                                        <Checkbox 
-                                            value={priceOverride}
-                                            onChange={(newValue) => {
-                                                setPriceOverride(newValue.target.checked);
-                                            }}
-                                            name="overridePrice"
-                                        />
-                                    } /> */}
-
-                                    <TextInput idName="hourlyRate" type={"number"} label={"Hourly Rate"} placeholder={"10"} disabled={priceOverride ? false : true} />
-                                    <Button variant="contained" type="submit" color="success" endIcon={<Check />}>Submit</Button>
+                                    <TextInput idName="hourlyRate" type={"number"} label={"Hourly Rate"} placeholder={"10"} />
+                                    <LoadingButton variant="contained" type="submit" color="success" endIcon={<Check />} disabled={isSubmitting} loading={isSubmitting}>Submit</LoadingButton>
                                 </Stack>
                             </LocalizationProvider>
                         </form>
