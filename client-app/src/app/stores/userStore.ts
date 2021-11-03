@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { history } from "../..";
 import agent from "../api/agent";
-import { UserConfig, User, UserFormValues } from "../layout/models/user";
+import { UserConfig, User, UserFormValues, AccountDetailsInfo } from "../layout/models/user";
 import { store } from "./store";
 
 export default class UserStore {
@@ -9,6 +9,7 @@ export default class UserStore {
     name: string = '';
     hourlyRate: number = 15;
     userConfig : UserConfig | null = null;
+    accountInfo : AccountDetailsInfo | null = null;
 
     constructor() {
         makeAutoObservable(this);
@@ -53,7 +54,11 @@ export default class UserStore {
     getUser = async () => {
         try {
             const user = await agent.Account.current();
-            this.setUser(user);
+            this.setUser(user.user);
+            this.setUserConfig(user.userConfig);
+            if(this.user !== null && this.userConfig !== null){
+                this.setAccountDetails(this.user!, this.userConfig!);
+            }
 
         } catch (error) {
             console.log(error);
@@ -71,11 +76,12 @@ export default class UserStore {
         }
     }
 
-    saveConfig = async (config: UserConfig) => {
+    saveConfig = async (config: AccountDetailsInfo) => {
         try {
             var userConfig = await agent.Account.saveUserConfig(config)
             runInAction(() => {
                 this.userConfig = userConfig;
+                this.setAccountDetails(this.user, this.userConfig);
             })
         } catch (error){
             console.log(error);
@@ -84,5 +90,20 @@ export default class UserStore {
 
     private setUser = (user : User) => {
         this.user = user;
+    }
+
+    private setUserConfig = (userConfig : UserConfig) => {
+        this.userConfig = userConfig;
+    }
+
+    private setAccountDetails = (user : User | null, userConfig : UserConfig | null) => {
+        if(!user || !userConfig) throw 'User or user config were null';
+
+        this.accountInfo = {
+            id: userConfig?.id,
+            email: user?.email,
+            hourlyRate: userConfig?.hourlyRate,
+            currency: userConfig?.currency
+        }
     }
 }

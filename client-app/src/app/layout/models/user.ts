@@ -23,3 +23,15 @@ export interface UserConfig {
     colourScheme: string;
     currency: string;
 }
+
+export interface UserFull {
+    user: User;
+    userConfig: UserConfig; 
+}
+
+export interface AccountDetailsInfo {
+    id: string,
+    email: string,
+    currency: string,
+    hourlyRate: number
+}

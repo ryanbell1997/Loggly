@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import { Log } from '../layout/models/log';
-import { User, UserFormValues, UserConfig } from '../layout/models/user';
+import { User, UserFormValues, UserConfig, UserFull, AccountDetailsInfo } from '../layout/models/user';
 import { store } from '../stores/store';
 
 const sleep = (delay: number) => {
@@ -88,9 +88,9 @@ const Users = {
 const Account = {
     login: (user: UserFormValues) => requests.post<User>('/account/login', user),
     register: (user: UserFormValues) => requests.post<User>('/account/register', user),
-    current: () => requests.get<User>('/account'),
+    current: () => requests.get<UserFull>('/account'),
     getAccountInfo: () => requests.get<UserConfig>('/account/getAccountInfo'),
-    saveUserConfig: (config: UserConfig) => requests.put<UserConfig>(`/userconfig/${config.id}`, config)
+    saveUserConfig: (config: AccountDetailsInfo) => requests.put<UserConfig>(`/userconfig/${config.id}`, config)
 }
 
 const agent = {

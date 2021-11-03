@@ -6,12 +6,12 @@ import { Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
 import TextInput from '../../app/layout/inputs/TextInput';
-import { UserConfig } from '../../app/layout/models/user';
+import { AccountDetailsInfo, UserConfig } from '../../app/layout/models/user';
 import { useStore } from '../../app/stores/store';
 
 export default observer(function UserAccount(){
     const { userStore} = useStore();
-    const { userConfig, getUserConfig, saveConfig } =  userStore;
+    const { userConfig, getUserConfig, saveConfig, accountInfo } =  userStore;
 
     useEffect(() => {
         if(userConfig == null){
@@ -19,9 +19,9 @@ export default observer(function UserAccount(){
         } 
     }, [userConfig])
 
-    const initialValues: UserConfig = userConfig ?? {
+    const initialValues: AccountDetailsInfo = accountInfo ?? {
         id: '',
-        colourScheme: '',
+        email: '',
         hourlyRate: 0,
         currency: '',
     };
@@ -37,7 +37,7 @@ export default observer(function UserAccount(){
                             initialValues={{
                                 ...initialValues
                             }}
-                            onSubmit={(values:UserConfig) => saveConfig(values)}
+                            onSubmit={(values:AccountDetailsInfo) => saveConfig(values)}
                         >
                             {({handleSubmit, isSubmitting}) => (
                                 <form onSubmit={handleSubmit} autoComplete="off">

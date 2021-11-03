@@ -75,11 +75,22 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        public async Task<ActionResult<UserConfigDTO>> GetCurrentUser()
         {
-            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            AppUser user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
-            return CreateUserObject(user);
+            if(user is not null)
+            {
+                UserConfig userConfig = await _context.UserConfigs.Where(x => x.UserId == user.Id).FirstOrDefaultAsync();
+
+                if(userConfig is not null)
+                {
+                    return CreateFullUserObject(user, userConfig);
+                }
+            }
+
+            return BadRequest("User not logged in");
+            
         }
 
         [Authorize]
@@ -121,6 +132,16 @@ namespace API.Controllers
                 Id = user.Id,
                 Token = _tokenService.CreateToken(user),
                 Username = user.UserName,
+                Email = user.Email,
+            };
+        }
+
+        private UserConfigDTO CreateFullUserObject(AppUser user, UserConfig userConfig)
+        {
+            return new UserConfigDTO
+            {
+                User = CreateUserObject(user),
+                UserConfig = userConfig
             };
         }
     }
