@@ -46,7 +46,7 @@ export default observer(function LogForm(){
         hourlyRate: Yup.number().required('An hourly rate is required')
     }) 
 
-    const handleSubmit = (values:any) => {;
+    const handleSubmit = (values:any) => {
         createOrEditLog(values);
     }
 

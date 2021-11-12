@@ -1,5 +1,5 @@
 import { GridRowData } from "@mui/x-data-grid";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Log } from "../layout/models/log";
 import { v4 as uuid } from 'uuid';
@@ -106,6 +106,9 @@ export default class LogStore {
             this.removeTableLog(id);
             this.removeLog(id);
             this.setLoading(false);
+            runInAction(() => {
+                store.modalStore.isConfirmationModalOpen = false
+            })
 
         } catch (error){
             console.log(error);
@@ -128,7 +131,7 @@ export default class LogStore {
     }
 
     getMonthlyLogQuantity = () => {
-           
+        //TODO   
     }
 
     private clearTableLogs = () => {
@@ -153,7 +156,7 @@ export default class LogStore {
             date: DateShortener(log.date),
             startTime: log.startTime,
             endTime: log.endTime,
-            earnings: log.totalCharged
+            earnings: `${store.userStore.accountInfo?.currency}${log.totalCharged}`
         }
     }
 

@@ -12,9 +12,38 @@ import NotFound from '../../features/Errors/NotFound';
 import ServerError from '../../features/Errors/ServerError';
 import RegistrationForm from '../../features/User/RegistrationForm';
 import { useStore } from '../stores/store';
+import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
 
 function App() {
   const {generalStore, userStore} = useStore();
+
+  let theme =  createTheme({
+    components: {
+      MuiTypography: {
+        styleOverrides: {
+          root: {
+            fontFamily: "Raleway, sans-serif"
+          }
+        }
+      }
+    },
+    palette: {
+      info: {
+        main: "#787878"
+      }
+    },
+    typography:{
+      h6:{
+        fontSize: '1.6rem', 
+        '@media (max-width:600px)': {
+          fontSize: '0.9rem'
+        }
+      }
+    }
+  })
+
+  theme = responsiveFontSizes(theme);
+
 
   useEffect(() => {
     if (generalStore.token){
@@ -28,6 +57,7 @@ function App() {
 
   return (
     <Fragment>
+      <ThemeProvider theme={theme}>
         <ToastContainer position="bottom-left" hideProgressBar/>
         <LogForm />
         <NavBar />
@@ -41,6 +71,7 @@ function App() {
           <Route component={NotFound} />
         </Switch>
         {/* location.key to clear fields. Key changes.*/}
+        </ThemeProvider>
     </Fragment>
   );
 }

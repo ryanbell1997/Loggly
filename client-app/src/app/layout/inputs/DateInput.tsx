@@ -4,9 +4,11 @@ import React from 'react'
 interface Props {
     idName: string;
     label: string;
+    type?: string | null;
+    style?: {} | null;
 }
 
-export default function DateInput({idName, label}: Props){
+export default function DateInput({idName, label, type, style}: Props){
     const [field, meta] = useField(idName);
     return (
         <TextField
@@ -14,13 +16,14 @@ export default function DateInput({idName, label}: Props){
             name={idName}
             label={label}
             value={field.value}
-            type={"date"}
+            type={type ?? "date"}
             error={meta.touched && !!meta.error}
             helperText={meta.touched && meta.error}
             onChange={field.onChange}  
             InputLabelProps={{
                 shrink: true,
                 }}
+            sx={{...style}}
         />
     )
 }
