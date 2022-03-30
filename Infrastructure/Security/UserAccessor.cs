@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 
@@ -19,7 +15,7 @@ namespace Infrastructure.Security
 
         public string GetUserId()
         {
-            throw new NotImplementedException();
+            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
         }
     }
 }

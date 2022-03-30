@@ -36,7 +36,7 @@ export default observer(function RegistrationForm(){
                     validationSchema={validationSchema}
                     onSubmit={values => register(values)}
                 >
-                    {({ handleSubmit, dirty, isSubmitting }) => (
+                    {({ handleSubmit, isSubmitting }) => (
                         <form onSubmit={handleSubmit}>
                             <Stack spacing={2}>
                                 <TextInput idName="userName" placeholder="Username" label="Username" />
@@ -44,7 +44,7 @@ export default observer(function RegistrationForm(){
                                 <TextInput idName="email" placeholder="Email" label="Email" type="email" />
                                 <TextInput idName="password" placeholder="Password" label="Password" type="password" />
                                 <TextInput idName="confirmedPassword" placeholder="Confirm Password" label="Confirm Password" type="password" />
-                                <LoadingButton variant="contained" type="submit" color="success" endIcon={<Check />} disabled={dirty || isSubmitting} loading={isSubmitting}>Register</LoadingButton>
+                                <LoadingButton variant="contained" type="submit" color="success" endIcon={<Check />} disabled={ isSubmitting } loading={isSubmitting}>Register</LoadingButton>
                                 <Button variant="contained" component={NavLink} to={"/user/signin"} color="info">Back</Button>
                             </Stack>
                         </form>

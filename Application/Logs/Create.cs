@@ -8,6 +8,8 @@ using Persistence;
 using AutoMapper;
 using FluentValidation;
 using Application.Core;
+using Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Logs
 {
@@ -31,17 +33,30 @@ namespace Application.Logs
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-            public Handler(DataContext context, IMapper mapper)
+            private readonly IUserAccessor _userAccessor;
+
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
             {
                 _context = context;
                 _mapper = mapper;
+                _userAccessor = userAccessor;
             }
 
             public async Task<Result<Log>> Handle(Command request, CancellationToken cancellationToken)
             {
+                string userId = request.Log.UserId;
+
+                if(userId == null)
+                {
+                    var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUserId());
+                }
+
+                if (string.IsNullOrEmpty(userId)) return Result<Log>.Failure("No user could be found");
+
                 Log eLog = new();
                 _mapper.Map(request.Log, eLog);
 
+                eLog.UserId = userId;
                 eLog.TotalTime = LogUtils.CalculateTotalTime(request.Log.StartTime, request.Log.EndTime);
                 eLog.TotalCharged = LogUtils.CalculateTotalEarnings(eLog.TotalTime, request.Log.HourlyRate);    
 
