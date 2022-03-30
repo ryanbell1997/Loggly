@@ -60,7 +60,7 @@ export default observer(function LogTable(){
                         
                     <ConfirmationModal />
                     <LogSummary />
-                    <DataGrid rows={rows} columns={columns} autoPageSize={true} autoHeight={true} loading={loading} />
+                    <DataGrid rows={rows} columns={columns} autoPageSize={true} autoHeight={true} loading={loading} disableColumnFilter  />
                     <SpeedDial
                         ariaLabel="logToolBar"
                         sx={{ position: 'fixed', bottom: 75, right: 16 }}
