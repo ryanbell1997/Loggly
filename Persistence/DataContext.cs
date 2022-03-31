@@ -12,5 +12,7 @@ namespace Persistence
 
         public DbSet<Log> Logs { get; set; }
         public DbSet<UserConfig> UserConfigs { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<LinkLogTag> LinkLogTags { get; set; }
     }
 }
