@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { DataGrid, GridActionsCellItem, GridColDef, GridRowParams, GridRowsProp } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridColDef, GridRowParams, GridRowsProp, GridValueFormatterParams } from '@mui/x-data-grid';
 import type {} from '@mui/x-data-grid/themeAugmentation';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import { Add, Delete, Edit, FileDownload, Share } from '@mui/icons-material';
@@ -7,12 +7,13 @@ import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import ConfirmationModal from './ConfirmationModal';
 import LogSummary from './LogSummary';
+import dateFormat from 'dateformat';
+import timeShortener from '../../utils/TimeShortener';
 
 export default observer(function LogTable(){
     const {logStore, modalStore} = useStore();
     const {tableLogs, deleteLog, loadLogs, openForm, loading} = logStore;
-    const {openConfirmationModal} = modalStore
-
+    const {openConfirmationModal} = modalStore;
 
     useEffect(() => {   
         loadLogs();
@@ -21,9 +22,17 @@ export default observer(function LogTable(){
     let rows: GridRowsProp = [...tableLogs];
 
     const columns: GridColDef[] = React.useMemo(() => [
-    { field: 'date', headerName: 'Date', flex:1 },
-    { field: 'startTime', headerName: 'Start Time', flex:1 },
-    { field: 'endTime', headerName: 'End Time', flex:1 },
+    { field: 'date', headerName: 'Date', flex:1, valueFormatter: (params: GridValueFormatterParams) => {
+        return dateFormat(params.value as Date, "dd, mmm, yyyy"); 
+    }},
+    { field: 'startTime', headerName: 'Start Time', flex:1, valueFormatter: (params: GridValueFormatterParams) => {
+        let timeString : string = params.value as string;
+        return timeShortener(timeString); 
+    } },
+    { field: 'endTime', headerName: 'End Time', flex:1, valueFormatter: (params: GridValueFormatterParams) => {
+        let timeString : string = params.value as string;
+        return timeShortener(timeString); 
+    } },
     { field: 'earnings', headerName: 'Earning', flex:1 },
     { field: 'actions', headerName: 'Actions', flex:1, type: 'actions', getActions: (params: GridRowParams) => [
         <GridActionsCellItem 

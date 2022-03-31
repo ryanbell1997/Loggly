@@ -25,6 +25,7 @@
     "@types/yup": "^0.29.13",
     "axios": "^0.21.4",
     "chart.js": "^3.6.0",
+    "dateformat": "^5.0.3",
     "formik": "^2.2.9",
     "luxon": "^2.0.2",
     "material-ui-color-picker": "^3.5.1",
@@ -70,6 +71,7 @@
     ]
   },
   "devDependencies": {
+    "@types/dateformat": "^5.0.0",
     "@types/react-router-dom": "^5.3.1",
     "@types/uuid": "^8.3.1",
     "webpack-cli": "^4.9.1"
