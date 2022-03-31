@@ -4,9 +4,9 @@ import { Formik } from 'formik';
 import React from 'react';
 import FacebookSignIn from './FacebookSignIn';
 import * as Yup from 'yup';
-import TextInput from '../../app/layout/inputs/TextInput';
+import TextInput from '../../../app/layout/inputs/TextInput';
 import { Link } from 'react-router-dom';
-import { useStore } from '../../app/stores/store';
+import { useStore } from '../../../app/stores/store';
 import { observer } from 'mobx-react-lite';
 import { LoadingButton } from '@mui/lab';
 

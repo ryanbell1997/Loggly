@@ -10,6 +10,7 @@ namespace Domain
         public string Description { get; set; }
         public decimal HourlyRate { get; set; }
         public string UserId { get; set; }
+        public string colourHex { get; set; }
         public ICollection<LinkLogTag> LinkLogTags { get; set; }
     }
 }

@@ -5,12 +5,12 @@ import LogForm from '../../features/Log/LogForm';
 import { observer } from 'mobx-react-lite';
 import { Route, Switch } from 'react-router-dom';
 import HomePage from '../../features/Dashboard/homepage';
-import UserAccount from '../../features/User/UserAccount';
-import UserSignIn from '../../features/User/UserSignIn';
+import UserAccount from '../../features/User/AccountSummary/UserAccount';
+import UserSignIn from '../../features/User/SignIn/UserSignIn';
 import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/Errors/NotFound';
 import ServerError from '../../features/Errors/ServerError';
-import RegistrationForm from '../../features/User/RegistrationForm';
+import RegistrationForm from '../../features/User/SignIn/RegistrationForm';
 import { useStore } from '../stores/store';
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
 

@@ -25,7 +25,7 @@ namespace Application.Tags
         {
             public CommandValidator()
             {
-                //RuleFor(x => x.Log).NotEmpty().SetValidator(new LogValidator());
+                RuleFor(x => x.Tag).NotEmpty().SetValidator(new TagValidator());
             }
         }
 
