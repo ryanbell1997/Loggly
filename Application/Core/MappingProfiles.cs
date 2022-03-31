@@ -12,6 +12,7 @@ namespace Application.Core
         public MappingProfiles()
         {
             CreateMap<Log, Log>();
+            CreateMap<Tag, Tag>();
         }
     }
 }
