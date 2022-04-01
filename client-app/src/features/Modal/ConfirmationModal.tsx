@@ -5,9 +5,9 @@ import React from 'react';
 import { useStore } from '../../app/stores/store';
 
 export default observer(function ConfirmationModal(){
-    const {modalStore, logStore} = useStore();
-    const { isConfirmationModalOpen, setConfirmationModalOpenStatus, modalTitle, modalDescription, confirmText, confirmId } = modalStore;
-    const { deleteLog } = logStore;
+    const {modalStore, userStore } = useStore();
+    const { isConfirmationModalOpen, setConfirmationModalOpenStatus, modalTitle, modalDescription, confirmText, confirmFunc } = modalStore;
+    const { user } = userStore;
 
     return (
         <Modal
@@ -20,8 +20,9 @@ export default observer(function ConfirmationModal(){
                 <Box sx={{padding: "1em" }}>
                     <Typography variant="h5">{modalTitle}</Typography>
                     <Typography>{modalDescription}</Typography>
-                    <Button onClick={() => deleteLog(confirmId)} variant="contained" color={"primary"} sx={{margin: "0.3em", marginLeft:"0px"}}>{confirmText}</Button>
+                    <LoadingButton onClick={confirmFunc} variant="contained" color={"primary"} sx={{margin: "0.3em", marginLeft:"0px"}}>{confirmText}</LoadingButton>
                     <Button color={"info"} onClick={() => setConfirmationModalOpenStatus(false)} sx={{margin: "0.3em"}} variant="contained">Cancel</Button>
+                    <Typography variant="body1" sx={{display:"none"}}>{user !== null ? user.id : ""}</Typography>
                 </Box>
             </Box>
         </Modal>

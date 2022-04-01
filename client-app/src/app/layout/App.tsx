@@ -13,6 +13,8 @@ import ServerError from '../../features/Errors/ServerError';
 import RegistrationForm from '../../features/User/SignIn/RegistrationForm';
 import { useStore } from '../stores/store';
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
+import Modal from '../../features/Modal/ConfirmationModal';
+import FormModal from '../../features/Modal/FormModal';
 
 function App() {
   const {generalStore, userStore} = useStore();
@@ -59,8 +61,9 @@ function App() {
     <Fragment>
       <ThemeProvider theme={theme}>
         <ToastContainer position="bottom-left" hideProgressBar/>
-        <LogForm />
         <NavBar />
+        <FormModal />
+        <Modal />
         <Switch>
           <Route exact path='/' component={HomePage} />
           <Route exact path='/log' component={LogTable} />

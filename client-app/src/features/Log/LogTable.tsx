@@ -5,14 +5,17 @@ import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import { Add, Delete, Edit, FileDownload, Share } from '@mui/icons-material';
 import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
-import ConfirmationModal from './ConfirmationModal';
+// import ConfirmationModal from './ConfirmationModal';
 import LogSummary from './LogSummary';
 import dateFormat from 'dateformat';
 import timeShortener from '../../utils/TimeShortener';
+import Modal from '../Modal/ConfirmationModal';
+import LogForm from './LogForm';
 
 export default observer(function LogTable(){
-    const {logStore, modalStore} = useStore();
-    const {tableLogs, deleteLog, loadLogs, openForm, loading} = logStore;
+    const {logStore, modalStore, formModalStore } = useStore();
+    const {tableLogs, deleteLog, loadLogs, openForm, loading, setSelectedLog} = logStore;
+    const { setFormModalOpenStatus } = formModalStore;
     const {openConfirmationModal} = modalStore;
 
     useEffect(() => {   
@@ -37,14 +40,19 @@ export default observer(function LogTable(){
     { field: 'actions', headerName: 'Actions', flex:1, type: 'actions', getActions: (params: GridRowParams) => [
         <GridActionsCellItem 
             icon={<Edit />} 
-            onClick={() => {openForm(params.id.toString())}}
+            onClick={() => {setFormModalOpenStatus(true, <LogForm />, setSelectedLog)}}
             label="Edit" />,
         
         <GridActionsCellItem 
         icon={<Delete />} 
-        onClick={() => {openConfirmationModal({title:"Delete Log", description:"Are you sure you want to delete this log?", confirmationText: "Delete", id: params.id.toString()})
+        onClick={() => {
+            openConfirmationModal({
+                title:"Delete Log", 
+                description:"Are you sure you want to delete this log?", 
+                confirmationText: "Delete", 
+                id: params.id.toString(), 
+                confirmFunc: () => deleteLog(params.id.toString())})
             }} 
-            // confirmFunc: deleteLog(params.id.toString())
         label="Delete" />,
         ]
     }
@@ -66,8 +74,7 @@ export default observer(function LogTable(){
                         }}
                         sx={{ marginTop: "1.2em", marginLeft: "1.2em", marginBottom: "1.2em"}}
                          /> */}
-                        
-                    <ConfirmationModal />
+                                           
                     <LogSummary />
                     <DataGrid rows={rows} columns={columns} autoPageSize={true} autoHeight={true} loading={loading} disableColumnFilter  />
                     <SpeedDial

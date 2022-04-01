@@ -7,6 +7,7 @@ export default class ModalStore {
     modalDescription: string = '';
     confirmText: string = '';
     confirmId: string = '';
+    confirmFunc: (...args: any[]) => any;
 
     constructor() {
         makeAutoObservable(this);
@@ -26,5 +27,6 @@ export default class ModalStore {
         this.modalDescription = params.description;
         this.confirmText = params.confirmationText;
         this.confirmId = params.id;
+        this.confirmFunc = params.confirmFunc;
     }
 }

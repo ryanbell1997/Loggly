@@ -6,6 +6,7 @@ import { makeAutoObservable } from "mobx";
 export default class LogStore {
     loading: boolean = false;
     selectedTag: Tag | undefined;
+    isModalOpen: boolean = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -33,5 +34,9 @@ export default class LogStore {
         if(tag !== undefined) {
             this.selectedTag = tag;
         }
+    }
+
+    openTagModal = (state : boolean) => {
+        this.isModalOpen = state;
     }
 }
