@@ -22,7 +22,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new List.Query { UserId = userId }));
         }
 
-        [HttpGet("getLog/{id}")]
+        [HttpGet("getTag/{id}")]
         public async Task<IActionResult> GetTag(Guid id)
         {
             return HandleResult(await Mediator.Send(new Get.Query { Id = id }));

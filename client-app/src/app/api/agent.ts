@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import { Log } from '../layout/models/log';
+import { Tag } from '../layout/models/tag';
 import { User, UserFormValues, UserConfig, UserFull, AccountDetailsInfo } from '../layout/models/user';
 import { store } from '../stores/store';
 
@@ -93,10 +94,19 @@ const Account = {
     saveUserConfig: (config: AccountDetailsInfo) => requests.put<UserConfig>(`/userconfig/${config.id}`, config)
 }
 
+const Tags = {
+    list: (userId: string) => requests.get<Tag[]>(`/tag/${userId}`),
+    details: (id: string) => requests.get<Tag>(`/tag/getTag/${id}`),
+    create: (tag: Tag) => requests.post<Tag>('/tag', tag),
+    update: (id: string, tag: Tag) => requests.put<Tag>(`/tag/${id}`, tag),
+    delete: (id: string) => requests.delete<void>(`/tag/${id}`)
+}
+
 const agent = {
     Logs,
     Users,
-    Account
+    Account,
+    Tags
 }
 
 export default agent
