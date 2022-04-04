@@ -10,10 +10,10 @@ export default class FormModalStore {
     }
 
     setFormModalOpenStatus = (isOpen: boolean, form:React.ReactNode | null, onLoadFunc: ((...args: any[]) => any) | null) => {
-        this.isFormModalOpen = isOpen;
         if(onLoadFunc !== null){
             onLoadFunc();
         }
+        this.isFormModalOpen = isOpen;
         this.form = form;
     }
 }

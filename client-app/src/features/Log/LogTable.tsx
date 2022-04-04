@@ -12,7 +12,7 @@ import LogForm from './LogForm';
 
 export default observer(function LogTable(){
     const {logStore, modalStore, formModalStore } = useStore();
-    const {tableLogs, deleteLog, loadLogs, loading, setSelectedLog} = logStore;
+    const {tableLogs, deleteLog, loadLogs, loading, setSelectedLog, openForm} = logStore;
     const { setFormModalOpenStatus } = formModalStore;
     const {openConfirmationModal} = modalStore;
 
@@ -38,7 +38,7 @@ export default observer(function LogTable(){
     { field: 'actions', headerName: 'Actions', flex:1, type: 'actions', getActions: (params: GridRowParams) => [
         <GridActionsCellItem 
             icon={<Edit />} 
-            onClick={() => {setFormModalOpenStatus(true, <LogForm />, setSelectedLog)}}
+            onClick={() => {setFormModalOpenStatus(true, <LogForm />, () => openForm(params.id.toString()))}}
             label="Edit" />,
         
         <GridActionsCellItem 
