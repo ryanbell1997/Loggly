@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { isOptionalChain } from "typescript";
 
 export default class FormModalStore {
     isFormModalOpen: boolean = false;
@@ -16,4 +17,9 @@ export default class FormModalStore {
         this.isFormModalOpen = isOpen;
         this.form = form;
     }
+
+    setIsFormModalOpen = (isOpen : boolean) => {
+        this.isFormModalOpen = isOpen;
+    }
+
 }

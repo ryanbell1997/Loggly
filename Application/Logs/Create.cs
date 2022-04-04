@@ -44,19 +44,15 @@ namespace Application.Logs
 
             public async Task<Result<Log>> Handle(Command request, CancellationToken cancellationToken)
             {
-                string userId = request.Log.UserId;
 
-                if(userId == null)
-                {
-                    var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUserId());
-                }
-
-                if (string.IsNullOrEmpty(userId)) return Result<Log>.Failure("No user could be found");
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUserId());
+                
+                if (user is null) return Result<Log>.Failure("Failed to validate user Token");
 
                 Log eLog = new();
                 _mapper.Map(request.Log, eLog);
 
-                eLog.UserId = userId;
+                eLog.UserId = user.Id;
                 eLog.TotalTime = LogUtils.CalculateTotalTime(request.Log.StartTime, request.Log.EndTime);
                 eLog.TotalCharged = LogUtils.CalculateTotalEarnings(eLog.TotalTime, request.Log.HourlyRate);    
 

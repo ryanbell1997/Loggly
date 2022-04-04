@@ -1,4 +1,5 @@
 ﻿using Application.Core;
+using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
@@ -31,17 +32,25 @@ namespace Application.Logs
         public class Handler : IRequestHandler<Command, Result<List<Log>>> 
         {
             private readonly DataContext _context;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context)
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 _context = context;
+                _userAccessor = userAccessor;
             }
+
+            public IUserAccessor UserAccessor { get; }
 
             public async Task<Result<List<Log>>> Handle(Command request, CancellationToken cancellationToken)
             {
-                List<Log> lstLog = await _context.Logs.Where(x => x.Date.Month == request.MonthYear.Month && x.Date.Year == request.MonthYear.Year).ToListAsync();
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == _userAccessor.GetUserId());
 
-                if (lstLog is null) return null;
+                if (user is null) return Result<List<Log>>.Failure("Failed to validate user Token");
+
+                List<Log> lstLog = await _context.Logs.Where(x => x.Date.Month == request.MonthYear.Month && x.Date.Year == request.MonthYear.Year && x.UserId == user.id).ToListAsync();
+
+                if (lstLog is null) return Result<List<Log>>.Success(lstLog);
 
                 return Result<List<Log>>.Success(lstLog);
             

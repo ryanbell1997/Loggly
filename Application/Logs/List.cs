@@ -7,6 +7,7 @@ using System.Linq;
 using Persistence;
 using Microsoft.EntityFrameworkCore;
 using Application.Core;
+using Application.Interfaces;
 
 namespace Application.Logs
 {
@@ -14,20 +15,27 @@ namespace Application.Logs
     {
         public class Query : IRequest<Result<List<Log>>> 
         {
-            public string UserId { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<List<Log>>>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 _context = context;
+                _userAccessor = userAccessor;
             }
+
+            public IUserAccessor UserAccessor { get; }
 
             public async Task<Result<List<Log>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return Result<List<Log>>.Success(await _context.Logs.Where(x => x.UserId == request.UserId).OrderByDescending(x => x.Date).ToListAsync());
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == _userAccessor.GetUserId());
+
+                if (user is null) return Result<List<Log>>.Failure("Failed to validate user Token");
+
+                return Result<List<Log>>.Success(await _context.Logs.Where(x => x.UserId == user.Id).OrderByDescending(x => x.Date).ToListAsync());
             }
         }
 

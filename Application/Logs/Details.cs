@@ -32,6 +32,8 @@ namespace Application.Logs
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == _userAccessor.GetUserId());
 
+                if (user is null) return Result<Log>.Failure("Failed to validate user Token");
+
                 Log eLog = await _context.Logs.FirstOrDefaultAsync(l => l.Id == request.Id && l.UserId == user.Id);
 
                 return Result<Log>.Success(eLog);

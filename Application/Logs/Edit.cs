@@ -1,11 +1,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
+using Application.Interfaces;
 using Application.Utils;
 using AutoMapper;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Logs
@@ -28,16 +30,24 @@ namespace Application.Logs
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context, IMapper mapper)
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
             {
                 _context = context;
                 _mapper = mapper;
+                _userAccessor = userAccessor;
             }
+
+            public IUserAccessor UserAccessor { get; }
 
             public async Task<Result<Log>> Handle(Command request, CancellationToken cancellationToken)
             {
-                Log eLog = await _context.Logs.FindAsync(request.Log.Id);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == _userAccessor.GetUserId());
+
+                if (user is null) return Result<Log>.Failure("Failed to validate user Token");
+
+                Log eLog = await _context.Logs.FirstOrDefaultAsync(l => l.Id == request.Log.Id && l.UserId == user.Id);
 
                 if (eLog is null) return null;
                 

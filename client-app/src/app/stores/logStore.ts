@@ -53,7 +53,7 @@ export default class LogStore {
                 this.setLog(log);
                 this.setSelectedLog(log)
                 this.setLoading(false);
-                this.setEditing(true);
+                store.formModalStore.setIsFormModalOpen(true);
                 return log;
             } catch(error){
                 console.log(error);
@@ -67,7 +67,7 @@ export default class LogStore {
         try {
             const returnedLog = await agent.Logs.update(log);
             this.editTableLogs(returnedLog);
-            this.setEditing(false);
+            store.formModalStore.setIsFormModalOpen(false);
             this.setLoading(false);
         }
         catch(error) {
@@ -91,7 +91,7 @@ export default class LogStore {
             log.id = uuid();
             const returnedLog : Log = await agent.Logs.create(log);
             this.setTableLogs(returnedLog);
-            this.setEditing(false);
+            store.formModalStore.setIsFormModalOpen(false);
             this.setLoading(false);
         } catch (error) {
             console.log(error);
@@ -118,11 +118,11 @@ export default class LogStore {
 
     openForm = (id?: string) => {
         id ? this.selectLog(id) : this.cancelSelectedLog();
-        this.editMode = true
+        store.formModalStore.setIsFormModalOpen(false);
     }
 
     closeForm = () => {
-        this.editMode = false;
+        store.formModalStore.setIsFormModalOpen(false);
         this.selectedLog = undefined;
     }
 
@@ -189,9 +189,5 @@ export default class LogStore {
 
     setLoading = (state: boolean) => {
         this.loading = state;
-    }
-
-    setEditing = (state: boolean) => {
-        this.editMode = state;
     }
 }
