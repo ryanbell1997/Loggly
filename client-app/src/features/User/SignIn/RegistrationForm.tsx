@@ -10,8 +10,8 @@ import { LoadingButton } from '@mui/lab'
 import { NavLink } from 'react-router-dom'
 
 export default observer(function RegistrationForm(){
-    const {userStore} = useStore();
-    const {register, user} = userStore;
+    const { userStore } = useStore();
+    const { register } = userStore;
 
     const validationSchema = Yup.object({
         name: Yup.string().required("A name is required"),

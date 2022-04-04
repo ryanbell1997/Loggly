@@ -5,16 +5,14 @@ import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import { Add, Delete, Edit, FileDownload, Share } from '@mui/icons-material';
 import { useStore } from '../../app/stores/store';
 import { observer } from 'mobx-react-lite';
-// import ConfirmationModal from './ConfirmationModal';
 import LogSummary from './LogSummary';
 import dateFormat from 'dateformat';
 import timeShortener from '../../utils/TimeShortener';
-import Modal from '../Modal/ConfirmationModal';
 import LogForm from './LogForm';
 
 export default observer(function LogTable(){
     const {logStore, modalStore, formModalStore } = useStore();
-    const {tableLogs, deleteLog, loadLogs, openForm, loading, setSelectedLog} = logStore;
+    const {tableLogs, deleteLog, loadLogs, loading, setSelectedLog} = logStore;
     const { setFormModalOpenStatus } = formModalStore;
     const {openConfirmationModal} = modalStore;
 
@@ -61,20 +59,7 @@ export default observer(function LogTable(){
     return(
         <div style={{ height: "80%", width: '100%'}}>
             <div style={{ display: 'flex', height: '100%' }}>
-                <div style={{ flexGrow: 1}}>
-                    {/* <TextField
-                        id="filteredDateTime"
-                        label="Filter by Month/Year"
-                        type="month"
-                        name="filteredDateTime"
-                        value={date}
-                        onChange={handleDateChange}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        sx={{ marginTop: "1.2em", marginLeft: "1.2em", marginBottom: "1.2em"}}
-                         /> */}
-                                           
+                <div style={{ flexGrow: 1}}>                                        
                     <LogSummary />
                     <DataGrid rows={rows} columns={columns} autoPageSize={true} autoHeight={true} loading={loading} disableColumnFilter  />
                     <SpeedDial
@@ -86,7 +71,7 @@ export default observer(function LogTable(){
                             key={"Add"}
                             icon={<Add />}
                             tooltipTitle={"Add"}
-                            onClick={() => openForm(undefined)}
+                            onClick={() => {setFormModalOpenStatus(true, <LogForm />, setSelectedLog)}}
                             />
                             <SpeedDialAction 
                             key={"Export"}

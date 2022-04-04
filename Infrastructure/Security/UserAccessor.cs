@@ -15,7 +15,7 @@ namespace Infrastructure.Security
 
         public string GetUserId()
         {
-            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }
