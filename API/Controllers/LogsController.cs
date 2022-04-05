@@ -19,7 +19,7 @@ namespace API.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetAllLogs(string userId)
         {
-            return HandleResult(await Mediator.Send(new List.Query { UserId = userId }));
+            return HandleResult(await Mediator.Send(new List.Query()));
         }
 
         [HttpGet("getLog/{id}")]

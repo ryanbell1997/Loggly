@@ -48,7 +48,7 @@ namespace Application.Logs
 
                 if (user is null) return Result<List<Log>>.Failure("Failed to validate user Token");
 
-                List<Log> lstLog = await _context.Logs.Where(x => x.Date.Month == request.MonthYear.Month && x.Date.Year == request.MonthYear.Year && x.UserId == user.id).ToListAsync();
+                List<Log> lstLog = await _context.Logs.Where(x => x.Date.Month == request.MonthYear.Month && x.Date.Year == request.MonthYear.Year && x.UserId == user.Id).ToListAsync();
 
                 if (lstLog is null) return Result<List<Log>>.Success(lstLog);
 
