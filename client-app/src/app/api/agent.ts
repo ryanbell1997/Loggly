@@ -95,7 +95,7 @@ const Account = {
 }
 
 const Tags = {
-    list: (userId: string) => requests.get<Tag[]>(`/tag/${userId}`),
+    list: () => requests.get<Tag[]>(`/tag`),
     details: (id: string) => requests.get<Tag>(`/tag/getTag/${id}`),
     create: (tag: Tag) => requests.post<Tag>('/tag', tag),
     update: (id: string, tag: Tag) => requests.put<Tag>(`/tag/${id}`, tag),

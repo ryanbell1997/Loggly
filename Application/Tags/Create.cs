@@ -44,17 +44,13 @@ namespace Application.Tags
 
             public async Task<Result<Tag>> Handle(Command request, CancellationToken cancellationToken)
             {
-                string userId = request.Tag.UserId;
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == _userAccessor.GetUserId());
 
-                if (userId == null)
-                {
-                    var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUserId());
-                }
-
-                if (string.IsNullOrEmpty(userId)) return Result<Tag>.Failure("No user could be found");
+                if (user is null) return Result<Tag>.Failure("Failed to validate user Token");
 
                 Tag eTag = new();
                 _mapper.Map(request.Tag, eTag);
+                eTag.UserId = user.Id;
 
                 _context.Tags.Add(eTag);
 

@@ -26,7 +26,7 @@ export default observer(function TagForm(){
 
     useEffect(() => {
         setTag(initialState);
-    }, [selectedTag]);
+    }, []);
 
     const [tag, setTag] = useState(initialState);
 

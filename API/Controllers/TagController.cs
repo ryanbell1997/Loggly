@@ -16,10 +16,10 @@ namespace API.Controllers
         {
         }
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetAllTags(string userId)
+        [HttpGet]
+        public async Task<IActionResult> GetAllTags()
         {
-            return HandleResult(await Mediator.Send(new List.Query { UserId = userId }));
+            return HandleResult(await Mediator.Send(new List.Query()));
         }
 
         [HttpGet("getTag/{id}")]

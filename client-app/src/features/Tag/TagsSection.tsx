@@ -1,16 +1,19 @@
-
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, Grid, Paper, Stack, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite';
-import React from 'react'
-import { useStore } from '../../../../app/stores/store';
-import TagForm from '../../../Tag/TagForm';
+import React, { useEffect } from 'react'
+import TagForm from './TagForm';
 import Tag from './Tag'
+import { useStore } from '../../app/stores/store';
 
 export default observer(function TagsSection(){
     const { formModalStore, tagStore } = useStore();
     const { setFormModalOpenStatus } =  formModalStore;
-    const { openForm } = tagStore;
+    const { openForm, tagArray, getTags,createOrEditTag } = tagStore;
+
+    useEffect(() => {
+        getTags();
+    }, [createOrEditTag])
 
     return(
         <Grid item xs={12} sm={6}>
@@ -18,8 +21,12 @@ export default observer(function TagsSection(){
                 <Box sx={{padding: '0.8em'}}>
                     <Stack spacing={2}>
                         <Typography variant='h5'>Tags</Typography>
-                        <div className='tagsContainer'>
-                            <Tag id="Cake" name="Facebook" description='something here' backgroundColor='red' userId='cake' hourlyRate={0}/>
+                        <div className='tagsContainer'> 
+                            { 
+                                tagArray === undefined ? null : tagArray.map((tag, key) => {
+                                        return <Tag key={`tag_${tag.id}`} id={tag.id} description={tag.description} backgroundColor={tag.colourHex} hourlyRate={tag.hourlyRate} name={tag.name} />
+                                    })
+                            }
                             <LoadingButton onClick={() => {setFormModalOpenStatus(true, <TagForm />, () => openForm())}} 
                                 type="submit" 
                                 variant="contained" 

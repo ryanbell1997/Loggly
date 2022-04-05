@@ -9,7 +9,7 @@ import TextInput from '../../../app/layout/inputs/TextInput';
 import { AccountDetailsInfo } from '../../../app/layout/models/user';
 import { useStore } from '../../../app/stores/store';
 import '../../../scss/UserAccount.scss';
-import TagsSection from './Tags/TagsSection';
+import TagsSection from '../../Tag/TagsSection';
 
 export default observer(function UserAccount(){
     const { userStore} = useStore();

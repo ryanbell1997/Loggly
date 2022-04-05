@@ -2,7 +2,7 @@ export interface Tag {
     id : string
     name: string
     description: string
-    hourlyRate: number
+    hourlyRate: number | undefined
     userId: string
     colourHex: string
 }
