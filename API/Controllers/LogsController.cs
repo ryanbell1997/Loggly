@@ -16,8 +16,8 @@ namespace API.Controllers
         {
         }
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetAllLogs(string userId)
+        [HttpGet()]
+        public async Task<IActionResult> GetAllLogs([FromQuery] bool getCurrentMonth)
         {
             return HandleResult(await Mediator.Send(new List.Query()));
         }
@@ -46,7 +46,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Edit.Command{Log = log}));
         }
 
-        [HttpGet("/{monthYear}")]
+        [HttpGet("getLogsByDate/{monthYear}")]
         public async Task<IActionResult> GetLogsByDate(DateTime monthYear)
         {
             return HandleResult(await Mediator.Send(new GetLogsByDate.Command { MonthYear = monthYear}));

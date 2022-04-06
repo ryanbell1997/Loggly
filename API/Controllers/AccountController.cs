@@ -117,8 +117,9 @@ namespace API.Controllers
                 else
                 {
                     await _context.UserConfigs.AddAsync(new UserConfig { UserId = user.Id });
-                    await _context.SaveChangesAsync();
                 }
+
+                await _context.SaveChangesAsync();
             }
 
             return accountInfoDto;

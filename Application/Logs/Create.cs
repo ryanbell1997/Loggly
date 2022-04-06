@@ -45,7 +45,7 @@ namespace Application.Logs
             public async Task<Result<Log>> Handle(Command request, CancellationToken cancellationToken)
             {
 
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUserId());
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == _userAccessor.GetUserId());
                 
                 if (user is null) return Result<Log>.Failure("Failed to validate user Token");
 

@@ -17,11 +17,10 @@ export default class LogStore {
         makeAutoObservable(this);
     }
     
-    private _loadLogs = async () => {
+    loadLogs = async (dateTime? : string | null) => {
         this.loading = true;
-
         try {
-            const logs = await agent.Logs.list(store.userStore?.user?.id!);
+            const logs = dateTime == null && !dateTime ? await this.getLogsByMonth() : await this.getLogsByMonth(dateTime);
             this.clearTableLogs();
             logs.forEach(log => {
                 this.setTableLogs(log);
@@ -33,12 +32,13 @@ export default class LogStore {
             this.setLoading(false);
         }
     };
-    public get loadLogs() {
-        return this._loadLogs;
-    }
-    public set loadLogs(value) {
-        this._loadLogs = value;
-    }
+
+    // public get loadLogs() {
+    //     return this._loadLogs;
+    // }
+    // public set loadLogs(value) {
+    //     this._loadLogs = value;
+    // }
 
     updateLog = async(id: string) => {
         let log = this.getLog(id);
@@ -116,6 +116,8 @@ export default class LogStore {
         }
     }
 
+
+
     openForm = (id?: string) => {
         id ? this.selectLog(id) : this.cancelSelectedLog();
         store.formModalStore.setIsFormModalOpen(false);
@@ -128,6 +130,16 @@ export default class LogStore {
 
     cancelSelectedLog = () => {
         this.selectedLog = undefined;
+    }
+
+    getLogsByMonth = async(dateString? : string) => {
+        if(dateString){
+            return await agent.Logs.getLogsByMonth(dateString);
+        }
+        else {
+            //Get the current month if no datestring.
+            return await agent.Logs.getLogsByMonth(new Date(Date.now()).toISOString());
+        }
     }
 
     getMonthlyLogQuantity = () => {

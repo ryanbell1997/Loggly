@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { request } from 'http';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import { Log } from '../layout/models/log';
@@ -73,6 +74,7 @@ const requests = {
 
 const Logs = {
     list: (userId: string) => requests.get<Log[]>(`/logs/${userId}`),
+    getLogsByMonth: (monthYear: string) => requests.get<Log[]>(`/logs/getLogsByDate/${monthYear}`),
     quantityMonthlyLogs: () => requests.get<number[]>('/logs/monthlyLogQuantity'),
     details: (id: string) => requests.get<Log>(`/logs/${id}`),
     create: (log: Log) => requests.post<Log>(`/logs/`, log),

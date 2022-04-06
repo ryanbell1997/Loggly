@@ -5,18 +5,19 @@ import React from 'react';
 import DateInput from '../../app/layout/inputs/DateInput';
 import { Log } from '../../app/layout/models/log';
 import { useStore } from '../../app/stores/store';
+import getDateIsoString from '../../utils/GetDateIsoString';
 
 export default function LogSummary(){
     const { userStore, logStore } = useStore();
     const { userConfig } = userStore;
-    const { logs } = logStore;
+    const { logs, loadLogs } = logStore;
 
     const initialState = {
         date: ''
     }
 
     const handleSubmit = (values:any) => {
-        console.log("hello");
+        loadLogs(getDateIsoString(values.date));
     }
 
     const overallLogsValues = () => {
