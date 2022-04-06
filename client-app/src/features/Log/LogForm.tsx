@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Stack, Typography } from '@mui/material';
+import { MenuItem, Stack, Typography } from '@mui/material';
 import AdapterLuxon from '@mui/lab/AdapterLuxon';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useStore } from '../../app/stores/store';
@@ -12,12 +12,15 @@ import TextInput from '../../app/layout/inputs/TextInput';
 import DateInput from '../../app/layout/inputs/DateInput';
 import TimeInput from '../../app/layout/inputs/TimeInput';
 import { LoadingButton } from '@mui/lab';
+import MultiSelectInput from '../../app/layout/inputs/MultiSelectInput';
+import { Tag } from '../../app/layout/models/tag';
 
 export default observer(function LogForm(){
 
-    const { logStore, userStore } = useStore();
+    const { logStore, userStore, tagStore } = useStore();
     const { selectedLog, createOrEditLog } = logStore;
     const { user, userConfig } = userStore;
+    const { tagArray } = tagStore;
 
     let myLog: Log | null = null;
     if(selectedLog !== undefined) myLog = {...selectedLog}
@@ -49,6 +52,16 @@ export default observer(function LogForm(){
         createOrEditLog(values);
     }
 
+    const menuItems = () => {
+        let returnArray : any[] = []
+        if(tagArray !== undefined && tagArray?.length > 0){
+            returnArray = tagArray?.map((tag : Tag, key) => {
+                return <MenuItem key={`${key}_${tag.id}`} value={tag.id}>{tag.name}</MenuItem>
+            });
+        }
+        return returnArray;
+    }
+
     return(
         <Formik 
         initialValues={{...initialState}} 
@@ -63,6 +76,7 @@ export default observer(function LogForm(){
                             <TimeInput idName="startTime" label="Start Time" />
                             <TimeInput idName="endTime" label="End Time" />
                             <TextInput idName="hourlyRate" type={"number"} label={"Hourly Rate"} placeholder={"10"} />
+                            <MultiSelectInput idName="linkLogTags" label={"Tags"} menuItems={() => menuItems()} />
                             <LoadingButton variant="contained" type="submit" color="success" endIcon={<Check />} disabled={isSubmitting} loading={isSubmitting}>Submit</LoadingButton>
                         </Stack>
                     </LocalizationProvider>
