@@ -10,6 +10,8 @@ using FluentValidation;
 using Application.Core;
 using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Application.Logs
 {
@@ -18,6 +20,7 @@ namespace Application.Logs
         public class Command : IRequest<Result<Log>>
         {
             public Log Log { get; set; }
+            public List<string> TagIds { get; set; }
 
         }
 
@@ -55,6 +58,20 @@ namespace Application.Logs
                 eLog.UserId = user.Id;
                 eLog.TotalTime = LogUtils.CalculateTotalTime(request.Log.StartTime, request.Log.EndTime);
                 eLog.TotalCharged = LogUtils.CalculateTotalEarnings(eLog.TotalTime, request.Log.HourlyRate);    
+
+                if(request.TagIds is not null && request.TagIds.Count > 0)
+                {
+                    var tags = await _context.Tags.Where(t => request.TagIds.Contains(t.Id.ToString())).ToListAsync();
+
+                    if(tags is not null && tags.Count > 0)
+                    {
+                        eLog.LinkLogTags = new List<LinkLogTag>();
+                        foreach(var tag in tags)
+                        {
+                            eLog.LinkLogTags.Add(new LinkLogTag { LogId = eLog.Id, TagId = tag.Id, UserId = user.Id });
+                        }
+                    }
+                }
 
                 _context.Logs.Add(eLog);
 

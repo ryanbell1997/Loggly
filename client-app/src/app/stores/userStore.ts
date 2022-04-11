@@ -32,6 +32,15 @@ export default class UserStore {
         }
     }
 
+    // logout = async() => {
+    //     try {
+            
+    //     }
+    //     catch (error){
+    //         console.log(error);
+    //     }
+    // }
+
     register = async(form: UserFormValues) => {
         try {
             const user = await agent.Account.register(form);

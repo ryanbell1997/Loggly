@@ -85,11 +85,12 @@ const Logs = {
 const Users = {
     details: (id: string) => requests.get<User>(`/user/${id}`),
     update: (user: User) => requests.put<void>(`/user/${user.id}`, user),
-    delete: (id: string) => requests.delete<void>(`/user/${id}`)
+    delete: (id: string) => requests.delete<void>(`/user/${id}`),
 }
 
 const Account = {
     login: (user: UserFormValues) => requests.post<User>('/account/login', user),
+    // logout: () => requests.post<void>('/account/logout');
     register: (user: UserFormValues) => requests.post<User>('/account/register', user),
     current: () => requests.get<UserFull>('/account'),
     getAccountInfo: () => requests.get<UserConfig>('/account/getAccountInfo'),

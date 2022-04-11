@@ -89,6 +89,7 @@ export default class LogStore {
         this.loading = true;
         try {
             log.id = uuid();
+
             const returnedLog : Log = await agent.Logs.create(log);
             this.setTableLogs(returnedLog);
             store.formModalStore.setIsFormModalOpen(false);

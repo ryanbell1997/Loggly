@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
+using API.DTOs;
 using Application.Logs;
 using MediatR;
 using Application.Core;
@@ -29,9 +30,9 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateLog([FromBody]Log log)
+        public async Task<IActionResult> CreateLog([FromBody] DTOs.LogDTO logDTO)
         {
-            return HandleResult(await Mediator.Send(new Create.Command{Log = log}));
+            return HandleResult(await Mediator.Send(new Create.Command{Log = logDTO.Log, TagIds = logDTO.TagIds }));
         }
 
         [HttpDelete("{id}")]

@@ -76,7 +76,7 @@ export default observer(function LogForm(){
                             <TimeInput idName="startTime" label="Start Time" />
                             <TimeInput idName="endTime" label="End Time" />
                             <TextInput idName="hourlyRate" type={"number"} label={"Hourly Rate"} placeholder={"10"} />
-                            <MultiSelectInput idName="linkLogTags" label={"Tags"} menuItems={() => menuItems()} />
+                            <MultiSelectInput idName="tagIds" label={"Tags"} menuItems={() => menuItems()} />
                             <LoadingButton variant="contained" type="submit" color="success" endIcon={<Check />} disabled={isSubmitting} loading={isSubmitting}>Submit</LoadingButton>
                         </Stack>
                     </LocalizationProvider>

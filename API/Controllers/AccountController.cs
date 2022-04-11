@@ -48,6 +48,14 @@ namespace API.Controllers
             return Unauthorized();
         }
 
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return Redirect("/user/signin");
+        }
+
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
@@ -77,7 +85,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<UserConfigDTO>> GetCurrentUser()
         {
-            AppUser user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            AppUser user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             if(user is not null)
             {
@@ -99,7 +107,7 @@ namespace API.Controllers
         {
             AccountInfoDto accountInfoDto = new();
 
-            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            var user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             if(user is not null)
             {
@@ -120,6 +128,10 @@ namespace API.Controllers
                 }
 
                 await _context.SaveChangesAsync();
+            }
+            else
+            {
+                return BadRequest("Could not find user");
             }
 
             return accountInfoDto;

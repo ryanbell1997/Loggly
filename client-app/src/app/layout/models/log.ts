@@ -6,4 +6,5 @@ export interface Log {
     hourlyRate: number
     totalCharged? : number
     is_overtime?: boolean
+    tagIds: string[]
 }

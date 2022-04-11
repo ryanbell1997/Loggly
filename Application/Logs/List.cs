@@ -8,34 +8,42 @@ using Persistence;
 using Microsoft.EntityFrameworkCore;
 using Application.Core;
 using Application.Interfaces;
+using AutoMapper;
 
 namespace Application.Logs
 {
     public class List
     {
-        public class Query : IRequest<Result<List<Log>>> 
+        public class Query : IRequest<Result<List<LogDTO>>> 
         {
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<Log>>>
+        public class Handler : IRequestHandler<Query, Result<List<LogDTO>>>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-            public Handler(DataContext context, IUserAccessor userAccessor)
+            private readonly IMapper _mapper;
+            public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper)
             {
                 _context = context;
                 _userAccessor = userAccessor;
+                _mapper = mapper;
             }
 
             public IUserAccessor UserAccessor { get; }
+            public IMapper Mapper { get; }
 
-            public async Task<Result<List<Log>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<LogDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == _userAccessor.GetUserId());
 
-                if (user is null) return Result<List<Log>>.Failure("Failed to validate user Token");
+                if (user is null) return Result<List<LogDTO>>.Failure("Failed to validate user Token");
 
-                return Result<List<Log>>.Success(await _context.Logs.Where(x => x.UserId == user.Id).OrderByDescending(x => x.Date).ToListAsync());
+                var logs = await _context.Logs.Where(x => x.UserId == user.Id).OrderByDescending(x => x.Date).ToListAsync(cancellationToken);
+
+                var logsToReturn = _mapper.Map<List<LogDTO>>(logs);
+
+                return Result<List<LogDTO>>.Success(logsToReturn);
             }
         }
 

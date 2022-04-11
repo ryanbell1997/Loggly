@@ -1,10 +1,10 @@
-import { Save } from '@mui/icons-material';
+import { Logout, Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextInput from '../../../app/layout/inputs/TextInput';
 import { AccountDetailsInfo } from '../../../app/layout/models/user';
 import { useStore } from '../../../app/stores/store';
@@ -20,6 +20,8 @@ export default observer(function UserAccount(){
             getUserConfig()
         } 
     }, [userConfig])
+
+    // const [isSubmitting, setSubmitting] = useState(false);
 
     const initialValues: AccountDetailsInfo = accountInfo ?? {
         id: '',
@@ -81,6 +83,7 @@ export default observer(function UserAccount(){
                         
                         </Formik>
                         <TagsSection />
+                        {/* <LoadingButton type="submit" variant="contained" color="error" sx={{fontSize: "1.2em"}} loading={} disabled={} endIcon={<Logout /> onclick={}}>Logout</LoadingButton> */}
                     </Box>
                 </Box>
             </Paper>
