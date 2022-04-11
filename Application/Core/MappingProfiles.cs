@@ -14,7 +14,8 @@ namespace Application.Core
         {
             CreateMap<Log, Log>();
             CreateMap<Tag, Tag>();
-            CreateMap<Log, LogDTO>();
+            CreateMap<Log, LogDTO>()
+                .ForMember(dest => dest.TagIds, o => o.MapFrom(s => s.LinkLogTags.Select(l => l.TagId.ToString())));
         }
     }
 }

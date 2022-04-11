@@ -171,6 +171,7 @@ export default class LogStore {
 
     private clearTableLogs = () => {
         this.tableLogs = [];
+        this.logs.clear();
     }
 
     private setTableLogs = (log : Log) => {

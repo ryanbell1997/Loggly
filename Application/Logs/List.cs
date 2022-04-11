@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Application.Core;
 using Application.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Application.Logs
 {
@@ -39,11 +40,9 @@ namespace Application.Logs
 
                 if (user is null) return Result<List<LogDTO>>.Failure("Failed to validate user Token");
 
-                var logs = await _context.Logs.Where(x => x.UserId == user.Id).OrderByDescending(x => x.Date).ToListAsync(cancellationToken);
+                var logs = await _context.Logs.ProjectTo<LogDTO>(_mapper.ConfigurationProvider).Where(x => x.UserId == user.Id).OrderByDescending(x => x.Date).ToListAsync(cancellationToken);
 
-                var logsToReturn = _mapper.Map<List<LogDTO>>(logs);
-
-                return Result<List<LogDTO>>.Success(logsToReturn);
+                return Result<List<LogDTO>>.Success(logs);
             }
         }
 

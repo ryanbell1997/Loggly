@@ -18,6 +18,6 @@ namespace Application.Logs
         public decimal TotalCharged { get; set; }
         public bool is_overtime { get; set; }
         public string UserId { get; set; }
-        public ICollection<LinkLogTag> LinkLogTags { get; set; }
+        public List<string> TagIds { get; set; }
     }
 }
