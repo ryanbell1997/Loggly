@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
-using API.DTOs;
 using Application.Logs;
 using MediatR;
 using Application.Core;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 namespace API.Controllers
 {
     public class LogsController : BaseApiController
     {
-        public LogsController(IMediator mediator) : base(mediator)
+        private readonly IMapper _mapper;
+
+        public LogsController(IMediator mediator, IMapper mapper) : base(mediator)
         {
+            _mapper = mapper;
         }
 
         [HttpGet()]
@@ -30,9 +33,11 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateLog([FromBody] DTOs.LogDTO logDTO)
+        public async Task<IActionResult> CreateLog([FromBody] LogDTO logDTO)
         {
-            return HandleResult(await Mediator.Send(new Create.Command{Log = logDTO.Log, TagIds = logDTO.TagIds }));
+            //return HandleResult(await Mediator.Send(new Create.Command{Log = logDTO.Log, TagIds = logDTO.TagIds }));
+            Log eLog = new();
+            return HandleResult(await Mediator.Send(new Create.Command { Log = _mapper.Map(logDTO, eLog) }));
         }
 
         [HttpDelete("{id}")]
