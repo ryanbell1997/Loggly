@@ -18,7 +18,7 @@ import { Tag } from '../../app/layout/models/tag';
 export default observer(function LogForm(){
 
     const { logStore, userStore, tagStore } = useStore();
-    const { selectedLog, createOrEditLog } = logStore;
+    const { selectedLog, createOrEditLog, createLogDTO } = logStore;
     const { user, userConfig } = userStore;
     const { tagArray } = tagStore;
 
@@ -49,7 +49,13 @@ export default observer(function LogForm(){
     }) 
 
     const handleSubmit = (values:any) => {
-        createOrEditLog(values);
+        const dto = createLogDTO(values);
+        if(dto !== undefined){
+            createOrEditLog(dto);
+        }
+        else {
+            console.log("An error occured when creating LogDTO for Log form");
+        }
     }
 
     const menuItems = () => {

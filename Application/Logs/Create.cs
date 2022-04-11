@@ -61,7 +61,7 @@ namespace Application.Logs
 
                 if(request.TagIds is not null && request.TagIds.Count > 0)
                 {
-                    var tags = await _context.Tags.Where(t => request.TagIds.Contains(t.Id.ToString())).ToListAsync();
+                    var tags = await _context.Tags.Where(t => request.TagIds.Contains(t.Id.ToString().ToLower())).ToListAsync();
 
                     if(tags is not null && tags.Count > 0)
                     {

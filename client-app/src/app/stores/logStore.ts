@@ -1,7 +1,7 @@
 import { GridRowData } from "@mui/x-data-grid";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Log } from "../layout/models/log";
+import { Log, LogDTO } from "../layout/models/log";
 import { v4 as uuid } from 'uuid';
 import DateShortener from "../../utils/DateShortener";
 import { store } from "./store";
@@ -39,6 +39,27 @@ export default class LogStore {
     // public set loadLogs(value) {
     //     this._loadLogs = value;
     // }
+    
+    createLogDTO = (values:any) => {
+        try {
+            let dto = {
+                log: {
+                    id: values.id,
+                    date: values.date,
+                    endTime: values.endTime,
+                    startTime: values.startTime,
+                    hourlyRate: values.hourlyRate,
+                    is_overtime: values.is_overtime,
+                    totalCharged: values.totalCharged,
+                },
+                tagIds: values.tagIds
+            } as LogDTO;
+
+            return dto;
+        } catch (err){
+            console.log(err);
+        }
+    }
 
     updateLog = async(id: string) => {
         let log = this.getLog(id);
@@ -62,10 +83,10 @@ export default class LogStore {
         }
     }
 
-    editLog = async(log: Log) => {
+    editLog = async(logDTO: LogDTO) => {
         this.loading = true;
         try {
-            const returnedLog = await agent.Logs.update(log);
+            const returnedLog = await agent.Logs.update(logDTO);
             this.editTableLogs(returnedLog);
             store.formModalStore.setIsFormModalOpen(false);
             this.setLoading(false);
@@ -76,21 +97,22 @@ export default class LogStore {
         }
     }
 
-    createOrEditLog = async(log : Log) => {
-        if(log.id === ""){
-            this.createLog(log);
+    createOrEditLog = async(logDTO : LogDTO) => {
+        if(logDTO.log.id === ""){
+            this.createLog(logDTO);
         }
         else {
-            this.editLog(log);
+            this.editLog(logDTO);
         }
     }
 
-    createLog = async(log: Log) => {
+    createLog = async(logDTO: LogDTO) => {
         this.loading = true;
         try {
-            log.id = uuid();
 
-            const returnedLog : Log = await agent.Logs.create(log);
+            logDTO.log.id = uuid();
+            
+            const returnedLog : Log = await agent.Logs.create(logDTO);
             this.setTableLogs(returnedLog);
             store.formModalStore.setIsFormModalOpen(false);
             this.setLoading(false);
