@@ -23,7 +23,6 @@ export default function SelectInput({ idName, label, options, disabled}: Props){
             onChange={field.onChange}
             error={meta.touched && !!meta.error}
             input={<OutlinedInput label={idName}/>}
-            multiple
         >
             {options.map(option => {
                 return (<MenuItem
