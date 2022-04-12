@@ -20,19 +20,25 @@ export default class TagStore {
     }
 
     getTags = async() => {
-        this.loading = true;
-        try {
-            const tags = await agent.Tags.list();;
-            tags.forEach(tag => {
-                this.tags.set(tag.id, tag);
-            })
-            this.populateTagArray();
-            this.setLoading(false);
+        if(this.tagArray === undefined || this.tagArray.length <= 0){
+            this.loading = true;
+            try {
+                const tags = await agent.Tags.list();;
+                tags.forEach(tag => {
+                    this.tags.set(tag.id, tag);
+                })
+                this.populateTagArray();
+                this.setLoading(false);
+            }
+            catch (error) {
+                console.log(error);
+                this.setLoading(false);
+            }
         }
-        catch (error) {
-            console.log(error);
-            this.setLoading(false);
+        else {
+            return this.tagArray;
         }
+        
     }
 
     createTag = async(tag: Tag) => {

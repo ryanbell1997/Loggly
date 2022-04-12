@@ -40,7 +40,7 @@ namespace Application.Logs
 
                 if (user is null) return Result<List<LogDTO>>.Failure("Failed to validate user Token");
 
-                var logs = await _context.Logs.ProjectTo<LogDTO>(_mapper.ConfigurationProvider).Where(x => x.UserId == user.Id).OrderByDescending(x => x.Date).ToListAsync(cancellationToken);
+                var logs = await _context.Logs.OrderByDescending(x => x.Date).ProjectTo<LogDTO>(_mapper.ConfigurationProvider).Where(x => x.UserId == user.Id).ToListAsync(cancellationToken);
 
                 return Result<List<LogDTO>>.Success(logs);
             }

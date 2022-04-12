@@ -52,11 +52,13 @@ namespace Application.Logs
 
                 if (user is null) return Result<List<LogDTO>>.Failure("Failed to validate user Token");
 
-                List<LogDTO> lstLog = await _context.Logs.ProjectTo<LogDTO>(_mapper.ConfigurationProvider)
+                List<LogDTO> lstLog = await _context.Logs.OrderByDescending(x => x.Date).ProjectTo<LogDTO>(_mapper.ConfigurationProvider)
                                                          .Where(x => x.Date.Month == request.MonthYear.Month && x.Date.Year == request.MonthYear.Year && x.UserId == user.Id)
                                                          .ToListAsync();
 
                 if (lstLog is null) return Result<List<LogDTO>>.Success(lstLog);
+
+                
 
                 return Result<List<LogDTO>>.Success(lstLog);
             
