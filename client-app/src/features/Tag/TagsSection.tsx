@@ -9,7 +9,7 @@ import { useStore } from '../../app/stores/store';
 export default observer(function TagsSection(){
     const { formModalStore, tagStore } = useStore();
     const { setFormModalOpenStatus } =  formModalStore;
-    const { openForm, tagArray, getTags,createOrEditTag } = tagStore;
+    const { openForm, tagArray, getTags, createOrEditTag } = tagStore;
 
     useEffect(() => {
         getTags();
@@ -24,7 +24,13 @@ export default observer(function TagsSection(){
                         <div className='tagsContainer'> 
                             { 
                                 tagArray === undefined ? null : tagArray.map((tag, key) => {
-                                        return <Tag key={`tag_${tag.id}`} id={tag.id} description={tag.description} backgroundColor={tag.colourHex} hourlyRate={tag.hourlyRate} name={tag.name} />
+                                        return <Tag key={`tag_${tag.id}`} 
+                                                    id={tag.id} 
+                                                    description={tag.description} 
+                                                    backgroundColor={tag.colourHex} 
+                                                    hourlyRate={tag.hourlyRate} 
+                                                    name={tag.name} 
+                                                    onClick={() => {setFormModalOpenStatus(true, <TagForm />, () => openForm(tag.id))}} />
                                     })
                             }
                             <LoadingButton onClick={() => {setFormModalOpenStatus(true, <TagForm />, () => openForm())}} 

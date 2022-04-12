@@ -1,15 +1,18 @@
 import { Logout, Save } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Grid, MenuItem, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
+import React, { ReactFragment, useEffect, useState } from 'react';
+import SelectInput from '../../../app/layout/inputs/SelectInput';
 import TextInput from '../../../app/layout/inputs/TextInput';
 import { AccountDetailsInfo } from '../../../app/layout/models/user';
 import { useStore } from '../../../app/stores/store';
 import '../../../scss/UserAccount.scss';
 import TagsSection from '../../Tag/TagsSection';
+import currenciesJson from '../../../app/resources/currencies.json';
+import { captureRejectionSymbol } from 'events';
 
 export default observer(function UserAccount(){
     const { userStore} = useStore();
@@ -21,6 +24,19 @@ export default observer(function UserAccount(){
         } 
     }, [userConfig])
 
+    const getCurrencies = () => {
+        // const currenciesObj = currenciesJson;
+
+        // let returnCurrencyMenuItems:any[] = [];
+
+        // if(currenciesObj){
+        //     for(var index:number in currenciesObj){
+        //         const currency:any = currenciesObj[index]
+        //         returnCurrencyMenuItems.push(<MenuItem key={}>{currency.symbol}</MenuItem>)
+        //     }
+        // }
+        
+    }
     // const [isSubmitting, setSubmitting] = useState(false);
 
     const initialValues: AccountDetailsInfo = accountInfo ?? {
@@ -61,6 +77,7 @@ export default observer(function UserAccount(){
                                                         <Typography variant="h5">My Info</Typography>
                                                         <TextInput idName="email" type="email" disabled={true} label="Email" /> 
                                                         <TextInput idName="currency" label="Currency" />
+                                                        {/* <SelectInput idName="currency" label="Currency" options={} /> */}
                                                     </Stack>
                                                 </Box>
                                             </Paper>
