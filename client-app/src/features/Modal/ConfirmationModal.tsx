@@ -3,6 +3,7 @@ import { Box, Button, Modal, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useStore } from '../../app/stores/store';
+import '../../scss/ConfirmModal.scss';
 
 export default observer(function ConfirmationModal(){
     const {modalStore, userStore } = useStore();
@@ -16,7 +17,7 @@ export default observer(function ConfirmationModal(){
         aria-labelledby={modalTitle}
         aria-describedby={modalDescription}
         >
-            <Box sx={{backgroundColor: "white", width:"90%", margin:"8em auto", borderRadius:"5px"}}>
+            <Box className="confirmModal" sx={{backgroundColor: "white", margin:"8em auto", borderRadius:"5px"}}>
                 <Box sx={{padding: "1em" }}>
                     <Typography variant="h5">{modalTitle}</Typography>
                     <Typography>{modalDescription}</Typography>

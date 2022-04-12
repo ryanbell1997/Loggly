@@ -1,0 +1,9 @@
+.confirmModal {
+    width: 40%;
+}
+
+@media (max-width: "576px") {
+    .confirmModal {
+        width: 90%;
+    }
+}
