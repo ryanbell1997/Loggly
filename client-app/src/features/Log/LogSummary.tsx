@@ -40,7 +40,9 @@ export default function LogSummary(){
                     onSubmit={values => handleSubmit(values)}>
                         {({handleSubmit}) => (
                             <form onChange={handleSubmit} autoComplete="off">
-                                <DateInput idName="date" label="Filter by month and year" type="month" style={{margin: "0px auto", width: "120px"}}/>
+                                <div>
+                                    <DateInput idName="date" label="Filter by month and year" type="month" style={{margin: "0px auto", width:"200px", display:"flex", justifyContent:"center"}} />
+                                </div>
                             </form>
                         )}
                     </Formik>

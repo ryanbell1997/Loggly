@@ -89,7 +89,6 @@ const Users = {
 
 const Account = {
     login: (user: UserFormValues) => requests.post<User>('/account/login', user),
-    // logout: () => requests.post<void>('/account/logout');
     register: (user: UserFormValues) => requests.post<User>('/account/register', user),
     current: () => requests.get<UserFull>('/account'),
     getAccountInfo: () => requests.get<UserConfig>('/account/getAccountInfo'),
