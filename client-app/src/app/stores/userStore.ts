@@ -24,22 +24,13 @@ export default class UserStore {
             const user = await agent.Account.login(creds);
             store.generalStore.setToken(user.token);
             this.setUser(user);
+            await this.getUserConfig();
             history.push('/log');
-
         }
         catch(error){
             throw error;
         }
     }
-
-    // logout = async() => {
-    //     try {
-            
-    //     }
-    //     catch (error){
-    //         console.log(error);
-    //     }
-    // }
 
     register = async(form: UserFormValues) => {
         try {
