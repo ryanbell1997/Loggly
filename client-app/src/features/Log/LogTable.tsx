@@ -9,6 +9,7 @@ import LogSummary from './LogSummary';
 import dateFormat from 'dateformat';
 import timeShortener from '../../utils/TimeShortener';
 import LogForm from './LogForm';
+import ExportForm from './ExportForm';
 
 export default observer(function LogTable(){
     const {logStore, modalStore, formModalStore } = useStore();
@@ -77,6 +78,7 @@ export default observer(function LogTable(){
                             key={"Export"}
                             icon={<FileDownload />}
                             tooltipTitle={"Export"}
+                            onClick={() => {setFormModalOpenStatus(true, <ExportForm />, null)}}
                             />
                             <SpeedDialAction 
                             key={"Share"}
