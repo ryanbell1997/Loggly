@@ -8,6 +8,7 @@ using MediatR;
 using Application.Core;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
+using Application.Logs.DTO;
 
 namespace API.Controllers
 {
@@ -58,10 +59,25 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new GetLogsByDate.Command { MonthYear = monthYear}));
         }
 
-        [HttpGet("/monthlyLogQuantity")]
+        [HttpGet("monthlyLogQuantity")]
         public async Task<IActionResult> GetMonthlyLogQuantities()
         {
             return HandleResult(await Mediator.Send(new MonthlyLogQuantities.Query()));
+        }
+
+        [HttpPost("export")]
+        public async Task<IActionResult> ExportLogs(ExportDTO exportDTO)
+        {
+            var result = await Mediator.Send(new Export.Command { ExportDTO = exportDTO });
+
+            if (result.IsSuccess)
+            {
+                return File(result.Value, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", exportDTO.FileName);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
         }
 
     }

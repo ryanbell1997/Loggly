@@ -1,7 +1,7 @@
 import { GridRowData } from "@mui/x-data-grid";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Log, LogDTO } from "../layout/models/log";
+import { ExportDTO, Log, LogDTO } from "../layout/models/log";
 import { v4 as uuid } from 'uuid';
 import DateShortener from "../../utils/DateShortener";
 import { store } from "./store";
@@ -136,6 +136,24 @@ export default class LogStore {
         } catch (error){
             console.log(error);
             this.setLoading(false);
+        }
+    }
+
+    exportLogs = async(dto: ExportDTO) => {
+        this.loading = true;
+        try {
+            var data = await agent.Logs.export(dto);
+            var blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+
+            var downloadURL = window.URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = downloadURL;
+            link.download = `${dto.fileName}.xlsx`;
+            link.click();
+            this.setLoading(false);
+        }
+        catch(err){
+            console.log(err);
         }
     }
 

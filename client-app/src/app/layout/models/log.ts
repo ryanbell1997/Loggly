@@ -21,3 +21,10 @@ export interface LogDTO {
     }
     tagIds: string[]
 }
+
+export interface ExportDTO {
+    fileName: string,
+    startDate: string,
+    endDate: string,
+    tagIds: string[]
+}

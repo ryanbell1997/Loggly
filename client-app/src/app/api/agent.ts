@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
-import { Log, LogDTO } from '../layout/models/log';
+import { ExportDTO, Log, LogDTO } from '../layout/models/log';
 import { Tag } from '../layout/models/tag';
 import { User, UserFormValues, UserConfig, UserFull, AccountDetailsInfo } from '../layout/models/user';
 import { store } from '../stores/store';
@@ -59,8 +59,6 @@ axios.interceptors.response.use(async response => {
     return Promise.reject(error);
 })
 
-
-
 const responseBody = <T> (response : AxiosResponse<T>) => response.data;
 
 const requests = {
@@ -78,7 +76,8 @@ const Logs = {
     details: (id: string) => requests.get<Log>(`/logs/${id}`),
     create: (logDTO: LogDTO) => requests.post<Log>(`/logs/`, logDTO),
     update: (logDTO: LogDTO) => requests.put<Log>(`/logs/${logDTO.log.id}`, logDTO),
-    delete: (id: string) => requests.delete<void>(`/logs/${id}`)
+    delete: (id: string) => requests.delete<void>(`/logs/${id}`),
+    export: (exportDTO: ExportDTO) => requests.post<any>('/logs/export', exportDTO)
 }
 
 const Users = {
