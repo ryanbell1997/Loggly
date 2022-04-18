@@ -59,6 +59,8 @@ namespace API
 
             // app.UseHttpsRedirection();
 
+            StripeConfiguration.ApiKey = _config["STRIPE_API_PK_KEY"];
+
             app.UseRouting();
 
             app.UseCors("CorsPolicy");
